@@ -1,11 +1,23 @@
 cmake_minimum_required (VERSION 3.28)
 
-project ("Zuno")
+project (Zuno)
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ZunoEditor)
+set (CoreFiles "src/Engine.h" "src/Engine.cpp")
 
-# Variables
-set(ZUNO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Zuno)
+add_library (${PROJECT_NAME}
+        ${CoreFiles})
 
-# Include sub-projects.
-add_subdirectory("Zuno")
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+# Defines
+target_compile_definitions(${PROJECT_NAME} PUBLIC $<$<CONFIG:Debug>:ZUNO_DEBUG>)
+target_compile_definitions(${PROJECT_NAME} PUBLIC $<$<CONFIG:Release>:ZUNO_RELEASE>)
+IF (WIN32)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ZUNO_WINDOWS)
+ELSEIF (APPLE)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ZUNO_APPLE)
+ELSEIF (LINUX)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ZUNO_LINUX)
+ENDIF()
