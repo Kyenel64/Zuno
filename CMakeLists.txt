@@ -2,7 +2,8 @@ cmake_minimum_required (VERSION 3.28)
 
 project (Zuno)
 
-set (CoreFiles "src/Engine.h" "src/Engine.cpp")
+set (CoreFiles "src/Engine.h" "src/Engine.cpp" "src/BaseGame.h" "src/BaseGame.cpp"
+        src/Run.h)
 
 add_library (${PROJECT_NAME}
         ${CoreFiles})

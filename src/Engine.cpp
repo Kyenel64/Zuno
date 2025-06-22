@@ -3,3 +3,7 @@
 //
 
 #include "Engine.h"
+
+namespace Zuno
+{
+}
