@@ -3,14 +3,17 @@
 // Main application class for Zuno
 #pragma once
 
+#include "Window.h"
+
 namespace Zuno
 {
     class Engine
     {
     public:
-        Engine() {};
+        Engine();
         ~Engine() {};
 
     private:
+        Window Window;
     };
 }
