@@ -6,6 +6,7 @@
 #include <SDL3/SDL.h>
 
 #include "Window.h"
+#include <memory>
 
 namespace Zuno
 {
@@ -13,16 +14,16 @@ namespace Zuno
     {
     public:
         explicit Graphics(const Window& window);
+        ~Graphics();
 
-        void Clear() const
-        {
-            SDL_SetRenderDrawColor(SDLRenderer, 0, 255, 0, 255);
-            SDL_RenderClear(SDLRenderer);
-        }
-        void Present() const { SDL_RenderPresent(SDLRenderer); }
+        void Clear() const;
+        void Present() const;
+
+        void DrawPoint(float x, float y) const;
+        void DrawLine(float x1, float y1, float x2, float y2) const;
 
     private:
         SDL_Renderer* SDLRenderer = nullptr;
-
+        const Window& m_Window;
     };
 }

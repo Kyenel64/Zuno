@@ -5,6 +5,7 @@
 
 #include "Window.h"
 #include "Graphics.h"
+#include <memory>
 
 namespace Zuno
 {
@@ -18,9 +19,12 @@ namespace Zuno
 
         void Run(BaseGame& game);
 
+        const Window& GetWindow() const { return *m_Window; }
+        const Graphics& GetGraphics() const { return *m_Graphics; }
+
     private:
-        std::unique_ptr<Window> Window = nullptr;
-        std::unique_ptr<Graphics> Graphics = nullptr;
+        std::unique_ptr<Window> m_Window = nullptr;
+        std::unique_ptr<Graphics> m_Graphics = nullptr;
         bool IsRunning = true;
     };
 }

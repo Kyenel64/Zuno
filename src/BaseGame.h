@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Key.h"
 
 namespace Zuno
 {
@@ -17,7 +18,7 @@ namespace Zuno
         virtual void OnDraw() {}
         virtual void OnQuit() {}
 
-        virtual void OnKeyPressed(int key) {}
+        virtual void OnKeyPressed(KeyCode key) {}
 
         void Run() { Engine.Run(*this); }
 

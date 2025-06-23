@@ -6,6 +6,7 @@
 #include "BaseGame.h"
 
 #include <SDL3/SDL.h>
+#include <iostream>
 
 namespace Zuno
 {
@@ -14,8 +15,8 @@ namespace Zuno
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) == false)
             std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
 
-        Window = std::make_unique<Zuno::Window>();
-        Graphics = std::make_unique<Zuno::Graphics>(*Window);
+        m_Window = std::make_unique<Zuno::Window>();
+        m_Graphics = std::make_unique<Zuno::Graphics>(*m_Window);
     }
 
     void Engine::Run(BaseGame& game)
@@ -29,14 +30,15 @@ namespace Zuno
             switch (event.type)
             {
                 case SDL_EVENT_QUIT: IsRunning = false; break;
+                case SDL_EVENT_KEY_DOWN: game.OnKeyPressed(static_cast<KeyCode>(event.key.scancode));
                 default: break;
             }
 
             game.OnUpdate();
 
-            Graphics->Clear();
+            m_Graphics->Clear();
             game.OnDraw();
-            Graphics->Present();
+            m_Graphics->Present();
         }
 
         game.OnQuit();

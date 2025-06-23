@@ -3,7 +3,6 @@
 //
 #pragma once
 
-#include <iostream>
 #include <SDL3/SDL.h>
 
 namespace Zuno
@@ -12,10 +11,12 @@ namespace Zuno
     {
     public:
         Window();
-
-        SDL_Window* GetSDLWindow() const { return SDLWindow;}
+        ~Window();
 
     private:
-        SDL_Window* SDLWindow = nullptr;
+        SDL_Window* m_SDLWindow = nullptr;
+
+    public:
+        friend class Graphics;
     };
 }

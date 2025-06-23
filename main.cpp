@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 #include "BaseGame.h"
+#include <iostream>
 
 class TestGame : public Zuno::BaseGame
 {
@@ -13,10 +14,18 @@ public:
 
     void OnLoad() override {}
     void OnUpdate() override {}
-    void OnDraw() override {}
 
+    void OnDraw() override
+    {
+        Engine.GetGraphics().DrawPoint(100, 100);
+        Engine.GetGraphics().DrawLine(100, 100, 200, 200);
+    }
 
-    void OnKeyPressed(int key) override {}
+    void OnKeyPressed(Zuno::KeyCode key) override
+    {
+        if (key == Zuno::KEY_W)
+            std::cout << "W Pressed";
+    }
 };
 
 int main()
