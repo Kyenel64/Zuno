@@ -19,6 +19,11 @@ namespace Zuno
         m_Graphics = std::make_unique<Zuno::Graphics>(*m_Window);
     }
 
+    Engine::~Engine()
+    {
+        SDL_Quit();
+    }
+
     void Engine::Run(BaseGame& game)
     {
         game.OnLoad();

@@ -6,7 +6,7 @@
 #include <SDL3/SDL.h>
 
 #include "Window.h"
-#include <memory>
+#include "Texture.h"
 
 namespace Zuno
 {
@@ -21,9 +21,12 @@ namespace Zuno
 
         void DrawPoint(float x, float y) const;
         void DrawLine(float x1, float y1, float x2, float y2) const;
+        void DrawTexture(const Texture* texture);
+
+        Texture* CreateTexture(const std::string& path);
 
     private:
-        SDL_Renderer* SDLRenderer = nullptr;
+        SDL_Renderer* m_SDLRenderer = nullptr;
         const Window& m_Window;
     };
 }

@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Window.h"
-#include "Graphics.h"
+#include "Graphics/Graphics.h"
 #include <memory>
 
 namespace Zuno
@@ -15,16 +15,20 @@ namespace Zuno
     {
     public:
         Engine();
-        ~Engine() {};
+        ~Engine();
 
+        Window& GetWindow() const { return *m_Window; }
+        Graphics& GetGraphics() const { return *m_Graphics; }
+
+    private:
         void Run(BaseGame& game);
-
-        const Window& GetWindow() const { return *m_Window; }
-        const Graphics& GetGraphics() const { return *m_Graphics; }
 
     private:
         std::unique_ptr<Window> m_Window = nullptr;
         std::unique_ptr<Graphics> m_Graphics = nullptr;
         bool IsRunning = true;
+
+    public:
+        friend class BaseGame;
     };
 }

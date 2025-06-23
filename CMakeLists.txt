@@ -5,9 +5,10 @@ project (Zuno)
 set (CoreFiles "src/Engine.h" "src/Engine.cpp" "src/BaseGame.h" "src/BaseGame.cpp"
         src/Window.cpp
         src/Window.h
-        src/Graphics.cpp
-        src/Graphics.h
-        src/Key.h)
+        src/Graphics/Graphics.cpp
+        src/Graphics/Graphics.h
+        src/Key.h
+        src/Graphics/Texture.h)
 
 add_library (${PROJECT_NAME}
         ${CoreFiles})
@@ -15,10 +16,12 @@ add_library (${PROJECT_NAME}
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL EXCLUDE_FROM_ALL)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL_image EXCLUDE_FROM_ALL)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL_image/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3 SDL3_image::SDL3_image)
 
 # Defines
 target_compile_definitions(${PROJECT_NAME} PUBLIC $<$<CONFIG:Debug>:ZUNO_DEBUG>)
