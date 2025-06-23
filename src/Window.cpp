@@ -3,15 +3,14 @@
 //
 
 #include "Window.h"
-#include <iostream>
+#include "Utils/Log.h"
 
 namespace Zuno
 {
     Window::Window()
     {
         m_SDLWindow = SDL_CreateWindow("Test", 1920, 1080, 0);
-        if (m_SDLWindow == nullptr)
-            std::cerr << "Window could not be created! SDL_Error: %s\n" << SDL_GetError() << std::endl;
+        ZUNO_ASSERT(m_SDLWindow != nullptr, "Window could not be created! SDL_Error: %s", SDL_GetError());
     }
 
     Window::~Window()

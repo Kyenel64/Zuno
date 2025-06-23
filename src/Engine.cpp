@@ -4,16 +4,16 @@
 
 #include "Engine.h"
 #include "BaseGame.h"
+#include "Utils/Log.h"
 
 #include <SDL3/SDL.h>
-#include <iostream>
 
 namespace Zuno
 {
     Engine::Engine()
     {
-        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) == false)
-            std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
+        bool success = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+        ZUNO_ASSERT(success, "Failed to initialize SDL: %s", SDL_GetError());
 
         m_Window = std::make_unique<Zuno::Window>();
         m_Graphics = std::make_unique<Zuno::Graphics>(*m_Window);

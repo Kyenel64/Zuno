@@ -2,7 +2,7 @@
 // Created by Kye Nelson on 6/23/25.
 //
 #include "Graphics.h"
-#include <iostream>
+#include "Utils/Log.h"
 
 namespace Zuno
 {
@@ -10,8 +10,7 @@ namespace Zuno
         : m_Window(window)
     {
         m_SDLRenderer = SDL_CreateRenderer(m_Window.m_SDLWindow, nullptr);
-        if (m_SDLRenderer == nullptr)
-            std::cerr << "Renderer could not be created! SDL_Error: %s\n" << SDL_GetError() << std::endl;
+        ZUNO_ASSERT(m_SDLRenderer != nullptr, "Renderer could not be created! SDL_Error: %s", SDL_GetError());
     }
 
     Graphics::~Graphics()

@@ -3,8 +3,9 @@
 //
 #pragma once
 
+#include "Utils/Log.h"
 #include <SDL3_image/SDL_image.h>
-#include <iostream>
+#include <string>
 
 namespace Zuno
 {
@@ -14,8 +15,7 @@ namespace Zuno
         Texture(SDL_Renderer* renderer, std::string path) : m_Path(std::move(path))
         {
             m_SDLTexture = IMG_LoadTexture(renderer, m_Path.c_str());
-            if (m_SDLTexture == nullptr)
-                std::cerr << "Could not load texture! SDL_Error: %s\n" << SDL_GetError() << std::endl;
+            ZUNO_ASSERT(m_SDLTexture != nullptr, "Could not load texture! SDL_Error: %s", SDL_GetError());
         }
 
     private:
