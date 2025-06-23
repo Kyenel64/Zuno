@@ -3,9 +3,10 @@ cmake_minimum_required (VERSION 3.28)
 project (Zuno)
 
 set (CoreFiles "src/Engine.h" "src/Engine.cpp" "src/BaseGame.h" "src/BaseGame.cpp"
-        src/Run.h
         src/Window.cpp
-        src/Window.h)
+        src/Window.h
+        src/Graphics.cpp
+        src/Graphics.h)
 
 add_library (${PROJECT_NAME}
         ${CoreFiles})
@@ -28,3 +29,16 @@ ELSEIF (APPLE)
 ELSEIF (LINUX)
     target_compile_definitions(${PROJECT_NAME} PUBLIC ZUNO_LINUX)
 ENDIF()
+
+project (TestMain)
+
+set (CoreFiles
+        main.cpp)
+
+add_executable(TestMain ${CoreFiles})
+
+set_property(TARGET TestMain PROPERTY CXX_STANDARD 20)
+
+target_include_directories(TestMain PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(TestMain PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Zuno/src)
+target_link_libraries(TestMain PRIVATE Zuno)

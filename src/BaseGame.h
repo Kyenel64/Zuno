@@ -19,9 +19,11 @@ namespace Zuno
 
         virtual void OnKeyPressed(int key) {}
 
-    protected:
-        explicit BaseGame(const Engine& engine) : Engine(engine) {}
+        void Run() { Engine.Run(*this); }
 
-        const Engine& Engine;
+    protected:
+        explicit BaseGame(Engine& engine) : Engine(engine) {}
+
+        Engine& Engine;
     };
 }

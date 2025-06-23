@@ -4,16 +4,23 @@
 #pragma once
 
 #include "Window.h"
+#include "Graphics.h"
 
 namespace Zuno
 {
+    class BaseGame;
+
     class Engine
     {
     public:
         Engine();
         ~Engine() {};
 
+        void Run(BaseGame& game);
+
     private:
-        Window Window;
+        std::unique_ptr<Window> Window = nullptr;
+        std::unique_ptr<Graphics> Graphics = nullptr;
+        bool IsRunning = true;
     };
 }

@@ -12,9 +12,10 @@ namespace Zuno
     {
     public:
         Window();
+
+        SDL_Window* GetSDLWindow() const { return SDLWindow;}
+
     private:
         SDL_Window* SDLWindow = nullptr;
-        SDL_Surface* SDLSurface = nullptr;
-        SDL_Surface* SDLHelloWorldSurface = nullptr;
     };
 }
