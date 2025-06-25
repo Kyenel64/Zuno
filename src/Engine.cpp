@@ -4,7 +4,6 @@
 
 #include "Engine.h"
 #include "BaseGame.h"
-#include "Utils/Log.h"
 
 #include <SDL3/SDL.h>
 
@@ -13,7 +12,7 @@ namespace Zuno
     Engine::Engine()
     {
         bool success = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-        ZUNO_ASSERT(success, "Failed to initialize SDL: %s", SDL_GetError());
+        SDL_assert(success);
 
         m_Window = std::make_unique<Zuno::Window>();
         m_Graphics = std::make_unique<Zuno::Graphics>(*m_Window);
