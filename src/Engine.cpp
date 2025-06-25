@@ -34,7 +34,8 @@ namespace Zuno
             switch (event.type)
             {
                 case SDL_EVENT_QUIT: IsRunning = false; break;
-                case SDL_EVENT_KEY_DOWN: game.OnKeyPressed(static_cast<KeyCode>(event.key.scancode));
+                case SDL_EVENT_KEY_DOWN: game.OnKeyPressed(static_cast<KeyCode>(event.key.scancode)); break;
+                case SDL_EVENT_WINDOW_RESIZED: game.OnWindowResized(event.display.data1, event.display.data2); break;
                 default: break;
             }
 

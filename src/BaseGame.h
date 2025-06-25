@@ -19,6 +19,7 @@ namespace Zuno
         virtual void OnQuit() {}
 
         virtual void OnKeyPressed(KeyCode key) {}
+        virtual void OnWindowResized(int w, int h) {}
 
         void Run() { Engine.Run(*this); }
 

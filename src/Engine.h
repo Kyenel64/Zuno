@@ -17,8 +17,8 @@ namespace Zuno
         Engine();
         ~Engine();
 
-        [[nodiscard]] Window& GetWindow() const { return *m_Window; }
-        [[nodiscard]] Graphics& GetGraphics() const { return *m_Graphics; }
+        Window& GetWindow() const { return *m_Window; }
+        Graphics& GetGraphics() const { return *m_Graphics; }
 
     private:
         void Run(BaseGame& game);

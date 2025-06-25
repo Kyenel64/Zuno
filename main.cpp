@@ -15,6 +15,9 @@ public:
 
     void OnLoad() override
     {
+        Engine.GetWindow().SetTitle("TestGame");
+        std::cout << Engine.GetWindow().GetTitle() << std::endl;;
+        std::cout << Engine.GetWindow().GetPosition().x << std::endl;
         m_TestTexture = Engine.GetGraphics().CreateTexture("../sample.png");
     }
 
