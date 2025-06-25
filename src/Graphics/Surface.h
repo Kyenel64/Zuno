@@ -1,10 +1,12 @@
-//
+// --- Surface.h ---
 // Created by Kye Nelson on 6/25/25.
-//
+// Surface object. CPU side image data.
 #pragma once
 
-#include <../../thirdparty/SDL_image/include/SDL3_image/SDL_image.h>
 #include <string>
+
+class SDL_Renderer;
+class SDL_Surface;
 
 namespace Zuno
 {

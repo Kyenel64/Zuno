@@ -1,15 +1,16 @@
-//
+// --- Window.h ---
 // Created by Kye Nelson on 6/22/25.
-//
+// Window subsystem. Manages all window related functions.
 #pragma once
 
-#include <SDL3/SDL.h>
-#include <string>
 #include <glm/glm.hpp>
-#include "Graphics/Surface.h"
+
+class SDL_Window;
 
 namespace Zuno
 {
+    class Surface;
+
     typedef enum DisplayOrientation
     {
         DISPLAY_ORIENTATION_UNKNOWN,

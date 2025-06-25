@@ -3,6 +3,12 @@
 //
 #include "Graphics.h"
 
+#include "Window.h"
+#include "Texture.h"
+#include "Surface.h"
+
+#include <SDL3/SDL.h>
+
 namespace Zuno
 {
     Graphics::Graphics(const Window& window)

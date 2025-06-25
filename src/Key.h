@@ -1,6 +1,6 @@
-//
+// --- Key.h ---
 // Created by Kye Nelson on 6/23/25.
-//
+// Keycodes and scancodes. Equivalent to SDL key mappings.
 #pragma once
 
 namespace Zuno

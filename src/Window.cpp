@@ -1,8 +1,11 @@
-//
+// --- Window.cpp ---
 // Created by Kye Nelson on 6/22/25.
 //
-
 #include "Window.h"
+
+#include "Graphics/Surface.h"
+
+#include <SDL3/SDL.h>
 
 namespace Zuno
 {

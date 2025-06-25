@@ -1,11 +1,13 @@
-//
+// --- main.cpp (test) ---
 // Created by Kye Nelson on 6/23/25.
-//
-
+// Entrypoint for testing Zuno API.
 #include "Engine.h"
+#include "Window.h"
+#include "Graphics/Graphics.h"
 #include "BaseGame.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Surface.h"
+
 #include <iostream>
 
 class TestGame : public Zuno::BaseGame

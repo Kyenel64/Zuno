@@ -1,13 +1,14 @@
-// --- Game ---
+// --- BaseGame.h ---
 // Created by Kye Nelson on 6/22/25.
-//
+// Superclass for all games using Zuno.
 #pragma once
 
-#include "Engine.h"
 #include "Key.h"
 
 namespace Zuno
 {
+    class Engine;
+
     class BaseGame
     {
     public:
@@ -21,7 +22,7 @@ namespace Zuno
         virtual void OnKeyPressed(KeyCode key) {}
         virtual void OnWindowResized(int w, int h) {}
 
-        void Run() { Engine.Run(*this); }
+        void Run();
 
     protected:
         explicit BaseGame(Engine& engine) : Engine(engine) {}

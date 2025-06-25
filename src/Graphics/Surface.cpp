@@ -1,9 +1,9 @@
-//
+// --- Surface.cpp ---
 // Created by Kye Nelson on 6/25/25.
 //
 #include "Surface.h"
 
-#include <../../thirdparty/SDL_image/include/SDL3_image/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 
 namespace Zuno
 {

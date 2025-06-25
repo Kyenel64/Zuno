@@ -1,10 +1,12 @@
-//
+// --- Texture.h ---
 // Created by Kye Nelson on 6/23/25.
-//
+// Texture object. GPU side image data for rendering.
 #pragma once
 
-#include <SDL3_image/SDL_image.h>
 #include <string>
+
+class SDL_Renderer;
+class SDL_Texture;
 
 namespace Zuno
 {

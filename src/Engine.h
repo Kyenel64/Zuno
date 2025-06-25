@@ -1,15 +1,15 @@
-// --- Engine ---
+// --- Engine.h ---
 // Created by Kye Nelson on 6/21/25.
-// Main application class for Zuno
+// Main engine class for Zuno. Only contains the main run loop and all the subsystems for Zuno.
 #pragma once
 
-#include "Window.h"
-#include "Graphics/Graphics.h"
 #include <memory>
 
 namespace Zuno
 {
     class BaseGame;
+    class Window;
+    class Graphics;
 
     class Engine
     {

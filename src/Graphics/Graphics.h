@@ -1,16 +1,18 @@
-//
+// --- Graphics.h ---
 // Created by Kye Nelson on 6/23/25.
-//
+// Graphics subsystem. Manages all rendering.
 #pragma once
 
-#include <SDL3/SDL.h>
+#include <string>
 
-#include "Window.h"
-#include "Texture.h"
-#include "Surface.h"
+class SDL_Renderer;
 
 namespace Zuno
 {
+    class Window;
+    class Texture;
+    class Surface;
+
     class Graphics
     {
     public:

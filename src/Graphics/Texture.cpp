@@ -1,7 +1,9 @@
-//
+// --- Texture.cpp ---
 // Created by Kye Nelson on 6/23/25.
 //
 #include "Texture.h"
+
+#include <SDL3_image/SDL_image.h>
 
 namespace Zuno
 {
