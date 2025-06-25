@@ -23,6 +23,11 @@ namespace Zuno
         return new Texture(m_SDLRenderer, path);
     }
 
+    Surface* Graphics::CreateSurface(const std::string& path)
+    {
+        return new Surface(m_SDLRenderer, path);
+    }
+
 
 
     void Graphics::Clear() const

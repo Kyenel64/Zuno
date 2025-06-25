@@ -16,11 +16,17 @@ namespace Zuno
 
         m_Window = std::make_unique<Zuno::Window>();
         m_Graphics = std::make_unique<Zuno::Graphics>(*m_Window);
+
+        SDL_Log("Initialized Engine");
     }
 
     Engine::~Engine()
     {
+        m_Graphics.reset();
+        m_Window.reset();
         SDL_Quit();
+
+        SDL_Log("Shutdown Engine");
     }
 
     void Engine::Run(BaseGame& game)

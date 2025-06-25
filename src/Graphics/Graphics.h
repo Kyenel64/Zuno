@@ -7,6 +7,7 @@
 
 #include "Window.h"
 #include "Texture.h"
+#include "Surface.h"
 
 namespace Zuno
 {
@@ -24,6 +25,7 @@ namespace Zuno
         void DrawTexture(const Texture* texture);
 
         Texture* CreateTexture(const std::string& path);
+        Surface* CreateSurface(const std::string& path);
 
     private:
         SDL_Renderer* m_SDLRenderer = nullptr;

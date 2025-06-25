@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "BaseGame.h"
 #include "Graphics/Texture.h"
+#include "Graphics/Surface.h"
 #include <iostream>
 
 class TestGame : public Zuno::BaseGame
@@ -16,14 +17,16 @@ public:
     void OnLoad() override
     {
         Engine.GetWindow().SetTitle("TestGame");
-        std::cout << Engine.GetWindow().GetTitle() << std::endl;;
-        std::cout << Engine.GetWindow().GetPosition().x << std::endl;
+
         m_TestTexture = Engine.GetGraphics().CreateTexture("../sample.png");
+        m_Icon = Engine.GetGraphics().CreateSurface("../icon.png");
+        Engine.GetWindow().SetIcon(m_Icon);
+
+        std::cout << Engine.GetWindow().GetDesktopSize().x << std::endl;
     }
 
     void OnUpdate() override
     {
-
     }
 
     void OnDraw() override
@@ -42,11 +45,12 @@ public:
     void OnKeyPressed(Zuno::KeyCode key) override
     {
         if (key == Zuno::KEY_W)
-            std::cout << "W Pressed";
+            Engine.GetWindow().SetFullscreen(!Engine.GetWindow().IsFullscreen());
     }
 
 private:
     Zuno::Texture* m_TestTexture = nullptr;
+    Zuno::Surface* m_Icon = nullptr;
 };
 
 int main()
