@@ -25,7 +25,7 @@ public:
 
         m_TestTexture = Engine.GetGraphics().CreateTexture("../sample.png");
         m_Icon = Engine.GetGraphics().CreateImageData("../icon.png");
-        m_Rect = Engine.GetGraphics().CreateRect(0, 0, 2000, 2000);
+        m_Rect = Engine.GetGraphics().CreateRect(0, 0, 32, 32);
 
         Engine.GetWindow().SetIcon(m_Icon);
 
@@ -41,7 +41,8 @@ public:
         Engine.GetGraphics().DrawPoint(100, 100);
         Engine.GetGraphics().DrawLine(100, 100, 200, 200);
 
-        Engine.GetGraphics().Draw(*m_TestTexture, *m_Rect, { Engine.GetWindow().GetSize().x / 2, Engine.GetWindow().GetSize().y / 2 }, 45, { 300, 300 }, { 150, 150});
+        //Engine.GetGraphics().Draw(*m_TestTexture, *m_Rect, { Engine.GetWindow().GetSize().x / 2, Engine.GetWindow().GetSize().y / 2 }, 45, { 300, 300 }, { 150, 150});
+        Engine.GetGraphics().DrawRect(*m_Rect);
     }
 
     void OnQuit() override

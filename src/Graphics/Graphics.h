@@ -26,6 +26,7 @@ namespace Zuno
 
         void DrawPoint(float x, float y) const;
         void DrawLine(float x1, float y1, float x2, float y2) const;
+        void DrawQuad(const Rect& rect);
         void Draw(const Texture& texture, const glm::vec2& position, float rotation = 0,
             const glm::vec2& scale = glm::vec2(1.0f), const glm::vec2& originOffset = glm::vec2(0.0f));
         void Draw(const Texture& texture, const Rect& rect, const glm::vec2& position, float rotation = 0,

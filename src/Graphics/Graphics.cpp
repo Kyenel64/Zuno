@@ -70,8 +70,13 @@ namespace Zuno
         SDL_RenderLine(m_SDLRenderer, x1, y1, x2, y2);
     }
 
+    void Graphics::DrawQuad(const Rect& rect)
+    {
+        SDL_RenderRect(m_SDLRenderer, &rect.m_SDLFRect);
+    }
+
     void Graphics::Draw(const Texture& texture, const glm::vec2& position, float rotation,
-        const glm::vec2& scale, const glm::vec2& originOffset)
+                        const glm::vec2& scale, const glm::vec2& originOffset)
     {
         SDL_FPoint offsetPoint = { originOffset.x, originOffset.y };
         SDL_FRect rect(position.x - originOffset.x, position.y - originOffset.y, scale.x, scale.y);
