@@ -11,7 +11,7 @@ namespace Zuno
 {
     class Window;
     class Texture;
-    class Surface;
+    class ImageData;
 
     class Graphics
     {
@@ -27,7 +27,8 @@ namespace Zuno
         void DrawTexture(const Texture* texture);
 
         Texture* CreateTexture(const std::string& path);
-        Surface* CreateSurface(const std::string& path);
+        Texture* CreateTexture(const ImageData* imageData);
+        ImageData* CreateImageData(const std::string& path);
 
     private:
         SDL_Renderer* m_SDLRenderer = nullptr;

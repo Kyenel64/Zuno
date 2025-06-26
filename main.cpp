@@ -6,7 +6,7 @@
 #include "Graphics/Graphics.h"
 #include "BaseGame.h"
 #include "Graphics/Texture.h"
-#include "Graphics/Surface.h"
+#include "Graphics/ImageData.h"
 
 #include <iostream>
 
@@ -21,7 +21,7 @@ public:
         Engine.GetWindow().SetTitle("TestGame");
 
         m_TestTexture = Engine.GetGraphics().CreateTexture("../sample.png");
-        m_Icon = Engine.GetGraphics().CreateSurface("../icon.png");
+        m_Icon = Engine.GetGraphics().CreateImageData("../icon.png");
         Engine.GetWindow().SetIcon(m_Icon);
 
         std::cout << Engine.GetWindow().GetDesktopSize().x << std::endl;
@@ -52,7 +52,7 @@ public:
 
 private:
     Zuno::Texture* m_TestTexture = nullptr;
-    Zuno::Surface* m_Icon = nullptr;
+    Zuno::ImageData* m_Icon = nullptr;
 };
 
 int main()

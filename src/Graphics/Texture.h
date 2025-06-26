@@ -7,13 +7,17 @@
 
 class SDL_Renderer;
 class SDL_Texture;
+class SDL_Surface;
 
 namespace Zuno
 {
     class Texture
     {
+    public:
+        ~Texture();
     private:
         Texture(SDL_Renderer* renderer, std::string path);
+        Texture(SDL_Renderer* renderer, SDL_Surface* surface);
 
     private:
         SDL_Texture* m_SDLTexture = nullptr;

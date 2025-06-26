@@ -1,6 +1,6 @@
 // --- Surface.h ---
 // Created by Kye Nelson on 6/25/25.
-// Surface object. CPU side image data.
+// Raw image data object. Stores image in raw bytes. Cannot be used for render. Must create a texture first.
 #pragma once
 
 #include <string>
@@ -10,11 +10,12 @@ class SDL_Surface;
 
 namespace Zuno
 {
-    class Surface
+    class ImageData
     {
+    public:
+        ~ImageData();
     private:
-        Surface(SDL_Renderer* renderer, std::string path);
-        Surface(SDL_Surface* surface);
+        ImageData(SDL_Renderer* renderer, std::string path);
 
     private:
         SDL_Surface* m_SDLSurface = nullptr;

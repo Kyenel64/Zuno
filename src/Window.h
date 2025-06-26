@@ -9,7 +9,7 @@ class SDL_Window;
 
 namespace Zuno
 {
-    class Surface;
+    class ImageData;
 
     typedef enum DisplayOrientation
     {
@@ -32,7 +32,7 @@ namespace Zuno
         void SetFullscreen(bool value);
         void Minimize();
         void Maximize();
-        void SetIcon(const Surface* surface);
+        void SetIcon(const ImageData* imageData);
 
         const char* GetTitle() const;
         glm::vec2 GetPosition() const;

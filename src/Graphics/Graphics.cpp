@@ -5,7 +5,7 @@
 
 #include "Window.h"
 #include "Texture.h"
-#include "Surface.h"
+#include "Graphics/ImageData.h"
 
 #include <SDL3/SDL.h>
 
@@ -29,11 +29,15 @@ namespace Zuno
         return new Texture(m_SDLRenderer, path);
     }
 
-    Surface* Graphics::CreateSurface(const std::string& path)
+    Texture* Graphics::CreateTexture(const ImageData* imageData)
     {
-        return new Surface(m_SDLRenderer, path);
+        return new Texture(m_SDLRenderer, imageData->m_SDLSurface);
     }
 
+    ImageData* Graphics::CreateImageData(const std::string& path)
+    {
+        return new ImageData(m_SDLRenderer, path);
+    }
 
 
     void Graphics::Clear() const

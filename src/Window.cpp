@@ -3,7 +3,7 @@
 //
 #include "Window.h"
 
-#include "Graphics/Surface.h"
+#include "Graphics/ImageData.h"
 
 #include <SDL3/SDL.h>
 
@@ -57,9 +57,9 @@ namespace Zuno
         SDL_MaximizeWindow(m_SDLWindow);
     }
 
-    void Window::SetIcon(const Surface* surface)
+    void Window::SetIcon(const ImageData* imageData)
     {
-        if (!SDL_SetWindowIcon(m_SDLWindow, surface->m_SDLSurface))
+        if (!SDL_SetWindowIcon(m_SDLWindow, imageData->m_SDLSurface))
             SDL_LogError(SDL_LOG_CATEGORY_GPU, "Failed to set icon. %s", SDL_GetError());
     }
 
