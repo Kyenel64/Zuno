@@ -42,7 +42,7 @@ public:
         Engine.GetGraphics().DrawLine(100, 100, 200, 200);
 
         //Engine.GetGraphics().Draw(*m_TestTexture, *m_Rect, { Engine.GetWindow().GetSize().x / 2, Engine.GetWindow().GetSize().y / 2 }, 45, { 300, 300 }, { 150, 150});
-        Engine.GetGraphics().DrawRect(*m_Rect);
+        Engine.GetGraphics().DrawQuad(*m_Rect);
     }
 
     void OnQuit() override
