@@ -11,7 +11,9 @@ set (CoreFiles "src/Engine.h" "src/Engine.cpp" "src/BaseGame.h" "src/BaseGame.cp
         src/Graphics/Texture.h
         src/Graphics/Texture.cpp
         src/Graphics/ImageData.cpp
-        src/Graphics/ImageData.h)
+        src/Graphics/ImageData.h
+        src/Graphics/Rect.cpp
+        src/Graphics/Rect.h)
 
 add_library (${PROJECT_NAME}
         ${CoreFiles})

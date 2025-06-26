@@ -6,8 +6,10 @@
 #include "Window.h"
 #include "Texture.h"
 #include "Graphics/ImageData.h"
+#include "Graphics/Rect.h"
 
 #include <SDL3/SDL.h>
+#include <glm/glm.hpp>
 
 namespace Zuno
 {
@@ -39,6 +41,11 @@ namespace Zuno
         return new ImageData(m_SDLRenderer, path);
     }
 
+    Rect* Graphics::CreateRect(float x1, float y1, float x2, float y2)
+    {
+        return new Rect(m_SDLRenderer, x1, y1, x2, y2);
+    }
+
 
     void Graphics::Clear() const
     {
@@ -63,8 +70,19 @@ namespace Zuno
         SDL_RenderLine(m_SDLRenderer, x1, y1, x2, y2);
     }
 
-    void Graphics::DrawTexture(const Texture* texture)
+    void Graphics::Draw(const Texture& texture, const glm::vec2& position, float rotation,
+        const glm::vec2& scale, const glm::vec2& originOffset)
     {
-        SDL_RenderTexture(m_SDLRenderer, texture->m_SDLTexture, nullptr, nullptr);
+        SDL_FPoint offsetPoint = { originOffset.x, originOffset.y };
+        SDL_FRect rect(position.x - originOffset.x, position.y - originOffset.y, scale.x, scale.y);
+        SDL_RenderTextureRotated(m_SDLRenderer, texture.m_SDLTexture, nullptr, &rect, rotation, &offsetPoint, SDL_FlipMode::SDL_FLIP_NONE);
+    }
+
+    void Graphics::Draw(const Texture& texture, const Rect& rect, const glm::vec2& position, float rotation,
+        const glm::vec2& scale, const glm::vec2& originOffset)
+    {
+        SDL_FPoint offsetPoint = { originOffset.x, originOffset.y };
+        SDL_FRect dstRect(position.x - originOffset.x, position.y - originOffset.y, scale.x, scale.y);
+        SDL_RenderTextureRotated(m_SDLRenderer, texture.m_SDLTexture, &rect.m_SDLFRect, &dstRect, rotation, &offsetPoint, SDL_FlipMode::SDL_FLIP_NONE);
     }
 }

@@ -3,6 +3,7 @@
 // Window subsystem. Manages all window related functions.
 #pragma once
 
+#include <string>
 #include <glm/glm.hpp>
 
 class SDL_Window;

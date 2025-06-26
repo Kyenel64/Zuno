@@ -7,6 +7,9 @@
 #include "BaseGame.h"
 #include "Graphics/Texture.h"
 #include "Graphics/ImageData.h"
+#include "Graphics/Rect.h"
+
+#include <glm/glm.hpp>
 
 #include <iostream>
 
@@ -22,6 +25,8 @@ public:
 
         m_TestTexture = Engine.GetGraphics().CreateTexture("../sample.png");
         m_Icon = Engine.GetGraphics().CreateImageData("../icon.png");
+        m_Rect = Engine.GetGraphics().CreateRect(0, 0, 2000, 2000);
+
         Engine.GetWindow().SetIcon(m_Icon);
 
         std::cout << Engine.GetWindow().GetDesktopSize().x << std::endl;
@@ -36,7 +41,7 @@ public:
         Engine.GetGraphics().DrawPoint(100, 100);
         Engine.GetGraphics().DrawLine(100, 100, 200, 200);
 
-        Engine.GetGraphics().DrawTexture(m_TestTexture);
+        Engine.GetGraphics().Draw(*m_TestTexture, *m_Rect, { Engine.GetWindow().GetSize().x / 2, Engine.GetWindow().GetSize().y / 2 }, 45, { 300, 300 }, { 150, 150});
     }
 
     void OnQuit() override
@@ -53,6 +58,7 @@ public:
 private:
     Zuno::Texture* m_TestTexture = nullptr;
     Zuno::ImageData* m_Icon = nullptr;
+    Zuno::Rect* m_Rect = nullptr;
 };
 
 int main()
