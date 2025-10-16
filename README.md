@@ -1,2 +1,2 @@
 # Zuno
-2D game framework in C++
+2D game engine in lua
