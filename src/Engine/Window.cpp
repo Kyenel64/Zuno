@@ -10,7 +10,7 @@
 
 #include "Event.h"
 
-static void GLFWErrorCallback(int error, const char* desc)
+static void GLFWErrorCallback(const int error, const char* desc)
 {
     std::cerr << "GLFW error " << error << ": " << desc << std::endl;
 }

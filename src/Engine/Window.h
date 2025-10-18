@@ -30,5 +30,5 @@ private:
     GLFWwindow* m_GLFWwindow = nullptr;
 
     uint32_t m_Width, m_Height;
-    std::function<void(Event&)> m_EventCallback;
+    std::function<void(Event&)> m_EventCallback = nullptr;
 };

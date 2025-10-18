@@ -50,7 +50,7 @@ private:
 class KeyPressedEvent final : public Event
 {
 public:
-    KeyPressedEvent(const Keycode key) : m_Key(key) {}
+    explicit KeyPressedEvent(const Keycode key) : m_Key(key) {}
     [[nodiscard]] EventType GetType() const override { return EventType::KeyPressed; }
 
     [[nodiscard]] Keycode GetKey() const { return m_Key; }
@@ -61,7 +61,7 @@ public:
 class KeyReleasedEvent final : public Event
 {
 public:
-    KeyReleasedEvent(const Keycode key) : m_Key(key) {}
+    explicit KeyReleasedEvent(const Keycode key) : m_Key(key) {}
     [[nodiscard]] EventType GetType() const override { return EventType::KeyReleased; }
 
     [[nodiscard]] Keycode GetKey() const { return m_Key; }
@@ -74,7 +74,7 @@ public:
 class MouseButtonPressedEvent final : public Event
 {
 public:
-    MouseButtonPressedEvent(const MouseButton key) : m_MouseButton(key) {}
+    explicit MouseButtonPressedEvent(const MouseButton key) : m_MouseButton(key) {}
     [[nodiscard]] EventType GetType() const override { return EventType::MouseButtonPressed; }
 
     [[nodiscard]] MouseButton GetMouseButton() const { return m_MouseButton; }
@@ -85,7 +85,7 @@ public:
 class MouseButtonReleasedEvent final : public Event
 {
 public:
-    MouseButtonReleasedEvent(const MouseButton key) : m_MouseButton(key) {}
+    explicit MouseButtonReleasedEvent(const MouseButton key) : m_MouseButton(key) {}
     [[nodiscard]] EventType GetType() const override { return EventType::MouseButtonReleased; }
 
     [[nodiscard]] MouseButton GetMouseButton() const { return m_MouseButton; }
