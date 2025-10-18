@@ -3,7 +3,8 @@
 //
 
 #pragma once
-#include "../Core/Keycode.h"
+#include "../Input/Key.h"
+#include "../Input/MouseButton.h"
 
 enum class EventType
 {
@@ -44,6 +45,7 @@ private:
     uint32_t m_Width, m_Height;
 };
 
+
 // Key events
 class KeyPressedEvent final : public Event
 {
@@ -65,4 +67,52 @@ public:
     [[nodiscard]] Keycode GetKey() const { return m_Key; }
 public:
     Keycode m_Key;
+};
+
+
+// Mouse events
+class MouseButtonPressedEvent final : public Event
+{
+public:
+    MouseButtonPressedEvent(const MouseButton key) : m_MouseButton(key) {}
+    [[nodiscard]] EventType GetType() const override { return EventType::MouseButtonPressed; }
+
+    [[nodiscard]] MouseButton GetMouseButton() const { return m_MouseButton; }
+public:
+    MouseButton m_MouseButton;
+};
+
+class MouseButtonReleasedEvent final : public Event
+{
+public:
+    MouseButtonReleasedEvent(const MouseButton key) : m_MouseButton(key) {}
+    [[nodiscard]] EventType GetType() const override { return EventType::MouseButtonReleased; }
+
+    [[nodiscard]] MouseButton GetMouseButton() const { return m_MouseButton; }
+public:
+    MouseButton m_MouseButton;
+};
+
+class MouseMovedEvent final : public Event
+{
+public:
+    MouseMovedEvent(const double x, const double y) : m_XPos(x), m_YPos(y) {}
+    [[nodiscard]] EventType GetType() const override { return EventType::MouseMoved; }
+
+    [[nodiscard]] double GetXPos() const { return m_XPos; }
+    [[nodiscard]] double GetYPos() const { return m_YPos; }
+public:
+    double m_XPos, m_YPos;
+};
+
+class MouseScrolledEvent final : public Event
+{
+public:
+    MouseScrolledEvent(const double xOffset, const double yOffset) : m_XOffset(xOffset), m_YOffset(yOffset) {}
+    [[nodiscard]] EventType GetType() const override { return EventType::MouseScrolled; }
+
+    [[nodiscard]] double GetXOffset() const { return m_XOffset; }
+    [[nodiscard]] double GetYOffset() const { return m_YOffset; }
+public:
+    double m_XOffset, m_YOffset;
 };

@@ -35,6 +35,30 @@ void OnEvent(Event& event)
             std::cout << "KeyReleasedEvent: " << "key: " << e->GetKey() << std::endl;
             break;
         }
+    case EventType::MouseButtonPressed:
+        {
+            const auto* e = dynamic_cast<MouseButtonPressedEvent*>(&event);
+            std::cout << "MouseButtonPressedEvent: " << "mouseButton: " << e->GetMouseButton() << std::endl;
+            break;
+        }
+    case EventType::MouseButtonReleased:
+        {
+            const auto* e = dynamic_cast<MouseButtonReleasedEvent*>(&event);
+            std::cout << "MouseButtonReleasedEvent: " << "mouseButton: " << e->GetMouseButton() << std::endl;
+            break;
+        }
+    case EventType::MouseMoved:
+        {
+            const auto* e = dynamic_cast<MouseMovedEvent*>(&event);
+            std::cout << "MouseMovedEvent: " << "X: " << e->GetXPos() << "Y: " << e->GetYPos() << std::endl;
+            break;
+        }
+    case EventType::MouseScrolled:
+        {
+            const auto* e = dynamic_cast<MouseScrolledEvent*>(&event);
+            std::cout << "MouseMovedEvent: " << "X: " << e->GetXOffset() << "Y: " << e->GetYOffset() << std::endl;
+            break;
+        }
     default:
         break;
     }

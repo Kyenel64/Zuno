@@ -12,7 +12,8 @@ add_executable(
         src/Engine/Window.h
         src/Engine/Window.cpp
         src/Engine/Event.h
-        src/Core/Keycode.h
+        src/Input/Key.h
+        src/Input/MouseButton.h
 )
 
 target_link_libraries(Zuno PRIVATE glfw)

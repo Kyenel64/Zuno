@@ -4,7 +4,9 @@
 
 #pragma once
 
-enum Keycode
+#include <ostream>
+
+enum class Keycode: int
 {
     // From GLFW3
     Space = 32,
@@ -138,3 +140,8 @@ enum Keycode
     RightSuper = 347,
     Menu = 348
 };
+
+inline std::ostream& operator<<(std::ostream& os, Keycode key)
+{
+    return os << static_cast<int>(key);
+}

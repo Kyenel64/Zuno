@@ -95,4 +95,40 @@ void Window::RegisterCallbacks() const
             }
         }
     });
+
+    // Mouse
+    glfwSetMouseButtonCallback(m_GLFWwindow, [](GLFWwindow* window, const int button, const int action, const int mods)
+    {
+        if (const auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window)); win->m_EventCallback)
+        {
+            if (action == GLFW_PRESS)
+            {
+                MouseButtonPressedEvent event(static_cast<MouseButton>(button));
+                win->m_EventCallback(event);
+            }
+            else if (action == GLFW_RELEASE)
+            {
+                MouseButtonReleasedEvent event(static_cast<MouseButton>(button));
+                win->m_EventCallback(event);
+            }
+        }
+    });
+
+    glfwSetCursorPosCallback(m_GLFWwindow, [](GLFWwindow* window, const double xpos, const double ypos)
+    {
+        if (const auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window)); win->m_EventCallback)
+        {
+            MouseMovedEvent event(xpos, ypos);
+            win->m_EventCallback(event);
+        }
+    });
+
+    glfwSetScrollCallback(m_GLFWwindow, [](GLFWwindow* window, const double xoffset, const double yoffset)
+    {
+        if (const auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window)); win->m_EventCallback)
+        {
+            MouseScrolledEvent event(xoffset, yoffset);
+            win->m_EventCallback(event);
+        }
+    });
 }
