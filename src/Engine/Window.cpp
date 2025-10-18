@@ -57,12 +57,42 @@ void Window::PollEvents()
 
 void Window::RegisterCallbacks() const
 {
+    // Window
     glfwSetWindowCloseCallback(m_GLFWwindow, [](GLFWwindow* window)
     {
         if (const auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window)); win->m_EventCallback)
         {
             WindowClosedEvent event;
             win->m_EventCallback(event);
+        }
+    });
+
+    glfwSetWindowSizeCallback(m_GLFWwindow, [](GLFWwindow* window, const int width, const int height)
+    {
+        if (auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window)); win->m_EventCallback)
+        {
+            WindowResizedEvent event(width, height);
+            win->m_Width = width; // Setting window width and height here.
+            win->m_Height = height;
+            win->m_EventCallback(event);
+        }
+    });
+
+    // Key
+    glfwSetKeyCallback(m_GLFWwindow, [](GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
+    {
+        if (const auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window)); win->m_EventCallback)
+        {
+            if (action == GLFW_PRESS)
+            {
+                KeyPressedEvent event(static_cast<Keycode>(key));
+                win->m_EventCallback(event);
+            }
+            else if (action == GLFW_RELEASE)
+            {
+                KeyReleasedEvent event(static_cast<Keycode>(key));
+                win->m_EventCallback(event);
+            }
         }
     });
 }
