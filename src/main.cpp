@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-#include "Core/Event.h"
-#include "Core/Window.h"
+#include "Engine/Event.h"
+#include "Engine/Window.h"
 
 // Temp
 void OnEvent(const Event& event)

@@ -17,6 +17,8 @@ class Event
 public:
     virtual ~Event() = default;
     [[nodiscard]] virtual EventType GetType() const = 0;
+
+public:
     bool handled = false;
 };
 
