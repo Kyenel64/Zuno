@@ -4,21 +4,85 @@
 
 #include <iostream>
 
-#include "Window.h"
+#include "Engine/Event.h"
+#include "Engine/Window.h"
+
+// Temp
+void OnEvent(Event& event)
+{
+    switch (event.GetType())
+    {
+    case EventType::WindowClose:
+        {
+            std::cout << "WindowClosedEvent" << std::endl;
+            break;
+        }
+    case EventType::WindowResize:
+        {
+            const auto* e = dynamic_cast<WindowResizedEvent*>(&event);
+            std::cout << "WindowResizedEvent: " << "w: " << e->GetWidth() << "h: " << e->GetHeight() << std::endl;
+            break;
+        }
+    case EventType::KeyPressed:
+        {
+            const auto* e = dynamic_cast<KeyPressedEvent*>(&event);
+            std::cout << "KeyPressedEvent: " << "key: " << e->GetKey() << std::endl;
+            break;
+        }
+    case EventType::KeyReleased:
+        {
+            const auto* e = dynamic_cast<KeyReleasedEvent*>(&event);
+            std::cout << "KeyReleasedEvent: " << "key: " << e->GetKey() << std::endl;
+            break;
+        }
+    case EventType::MouseButtonPressed:
+        {
+            const auto* e = dynamic_cast<MouseButtonPressedEvent*>(&event);
+            std::cout << "MouseButtonPressedEvent: " << "mouseButton: " << e->GetMouseButton() << std::endl;
+            break;
+        }
+    case EventType::MouseButtonReleased:
+        {
+            const auto* e = dynamic_cast<MouseButtonReleasedEvent*>(&event);
+            std::cout << "MouseButtonReleasedEvent: " << "mouseButton: " << e->GetMouseButton() << std::endl;
+            break;
+        }
+    case EventType::MouseMoved:
+        {
+            const auto* e = dynamic_cast<MouseMovedEvent*>(&event);
+            std::cout << "MouseMovedEvent: " << "X: " << e->GetXPos() << "Y: " << e->GetYPos() << std::endl;
+            break;
+        }
+    case EventType::MouseScrolled:
+        {
+            const auto* e = dynamic_cast<MouseScrolledEvent*>(&event);
+            std::cout << "MouseMovedEvent: " << "X: " << e->GetXOffset() << "Y: " << e->GetYOffset() << std::endl;
+            break;
+        }
+    default:
+        break;
+    }
+}
 
 int main()
 {
     std::cout << "Welcome to Zuno!" << std::endl;
 
-    // 1. Initialize subsystems
-    // 2. Create lua vm
-    // 3. Gameloop
-    // 4. Destroy
+    // 1. Initialize subsystems (window, graphics, lua, console, etc.)
+    // 2. Gameloop
+    // 3. Destroy
 
-    auto window = Window();
+    Window window("Zuno", 640, 480);
+    window.SetEventCallback(OnEvent);
 
-    while (!window.ShouldClose())
+    bool running = true;
+    while (running)
     {
         window.PollEvents();
+        if (window.ShouldClose())
+            running = false;
+
+        // Update()
+        // Render()
     }
 }
