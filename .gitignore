@@ -39,3 +39,10 @@
 
 # debug information files
 *.dwo
+
+# Jetbrains
+.idea
+
+# Cmake
+cmake-build-debug
+cmake-build-release
