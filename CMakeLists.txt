@@ -9,8 +9,9 @@ include(deps.cmake)
 add_executable(
         Zuno
         src/main.cpp
-        src/Window.h
-        src/Window.cpp
+        src/Engine/Window.h
+        src/Engine/Window.cpp
+        src/Engine/Event.h
 )
 
 target_link_libraries(Zuno PRIVATE glfw)

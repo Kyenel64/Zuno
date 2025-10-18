@@ -4,21 +4,35 @@
 
 #include <iostream>
 
-#include "Window.h"
+#include "Core/Event.h"
+#include "Core/Window.h"
+
+// Temp
+void OnEvent(const Event& event)
+{
+    if (event.GetType() == EventType::WindowClose)
+        std::cout << "WindowClosedEvent" << std::endl;
+}
 
 int main()
 {
     std::cout << "Welcome to Zuno!" << std::endl;
 
-    // 1. Initialize subsystems
-    // 2. Create lua vm
-    // 3. Gameloop
-    // 4. Destroy
+    // 1. Initialize subsystems (window, graphics, lua, console, etc.)
+    // 2. Gameloop
+    // 3. Destroy
 
-    auto window = Window();
+    Window window("Zuno", 640, 480);
+    window.SetEventCallback(OnEvent);
 
-    while (!window.ShouldClose())
+    bool running = true;
+    while (running)
     {
         window.PollEvents();
+        if (window.ShouldClose())
+            running = false;
+
+        // Update()
+        // Render()
     }
 }
