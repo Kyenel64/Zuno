@@ -18,6 +18,8 @@ public:
 
     [[nodiscard]] bool ShouldClose() const;
 
+    void SetShouldClose(bool value) const;
+
     void PollEvents();
 
     template<typename Fn>

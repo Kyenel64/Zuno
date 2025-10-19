@@ -74,12 +74,9 @@ int main()
     Window window("Zuno", 640, 480);
     window.SetEventCallback(OnEvent);
 
-    bool running = true;
-    while (running)
+    while (!window.ShouldClose())
     {
         window.PollEvents();
-        if (window.ShouldClose())
-            running = false;
 
         // Update()
         // Render()
