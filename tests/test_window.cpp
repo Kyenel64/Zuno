@@ -8,14 +8,14 @@
 TEST(Window, WindowEventCallback)
 {
     bool callBackTriggered = false;
-    Window window("TestCallback", 640, 480);
-    window.SetEventCallback([&](Event& e)
+    Zuno::Window window("TestCallback", 640, 480);
+    window.SetEventCallback([&](Zuno::Event& e)
     {
         callBackTriggered = true;
-        EXPECT_EQ(e.GetType(), EventType::WindowClose);
+        EXPECT_EQ(e.GetType(), Zuno::EventType::WindowClose);
     });
 
-    WindowClosedEvent e;
+    Zuno::WindowClosedEvent e;
     window.DispatchEvent(e);
 
     EXPECT_TRUE(callBackTriggered);
@@ -23,7 +23,7 @@ TEST(Window, WindowEventCallback)
 
 TEST(Window, WindowShouldClose)
 {
-    Window window("TestClose", 640, 480);
+    Zuno::Window window("TestClose", 640, 480);
 
     EXPECT_FALSE(window.ShouldClose());
 

@@ -7,54 +7,54 @@
 #include "ZunoEngine.h"
 
 // Temp
-void OnEvent(Event& event)
+void OnEvent(Zuno::Event& event)
 {
     switch (event.GetType())
     {
-    case EventType::WindowClose:
+    case Zuno::EventType::WindowClose:
         {
             std::cout << "WindowClosedEvent" << std::endl;
             break;
         }
-    case EventType::WindowResize:
+    case Zuno::EventType::WindowResize:
         {
-            const auto* e = dynamic_cast<WindowResizedEvent*>(&event);
+            const auto* e = dynamic_cast<Zuno::WindowResizedEvent*>(&event);
             std::cout << "WindowResizedEvent: " << "w: " << e->GetWidth() << "h: " << e->GetHeight() << std::endl;
             break;
         }
-    case EventType::KeyPressed:
+    case Zuno::EventType::KeyPressed:
         {
-            const auto* e = dynamic_cast<KeyPressedEvent*>(&event);
+            const auto* e = dynamic_cast<Zuno::KeyPressedEvent*>(&event);
             std::cout << "KeyPressedEvent: " << "key: " << e->GetKey() << std::endl;
             break;
         }
-    case EventType::KeyReleased:
+    case Zuno::EventType::KeyReleased:
         {
-            const auto* e = dynamic_cast<KeyReleasedEvent*>(&event);
+            const auto* e = dynamic_cast<Zuno::KeyReleasedEvent*>(&event);
             std::cout << "KeyReleasedEvent: " << "key: " << e->GetKey() << std::endl;
             break;
         }
-    case EventType::MouseButtonPressed:
+    case Zuno::EventType::MouseButtonPressed:
         {
-            const auto* e = dynamic_cast<MouseButtonPressedEvent*>(&event);
+            const auto* e = dynamic_cast<Zuno::MouseButtonPressedEvent*>(&event);
             std::cout << "MouseButtonPressedEvent: " << "mouseButton: " << e->GetMouseButton() << std::endl;
             break;
         }
-    case EventType::MouseButtonReleased:
+    case Zuno::EventType::MouseButtonReleased:
         {
-            const auto* e = dynamic_cast<MouseButtonReleasedEvent*>(&event);
+            const auto* e = dynamic_cast<Zuno::MouseButtonReleasedEvent*>(&event);
             std::cout << "MouseButtonReleasedEvent: " << "mouseButton: " << e->GetMouseButton() << std::endl;
             break;
         }
-    case EventType::MouseMoved:
+    case Zuno::EventType::MouseMoved:
         {
-            const auto* e = dynamic_cast<MouseMovedEvent*>(&event);
+            const auto* e = dynamic_cast<Zuno::MouseMovedEvent*>(&event);
             std::cout << "MouseMovedEvent: " << "X: " << e->GetXPos() << "Y: " << e->GetYPos() << std::endl;
             break;
         }
-    case EventType::MouseScrolled:
+    case Zuno::EventType::MouseScrolled:
         {
-            const auto* e = dynamic_cast<MouseScrolledEvent*>(&event);
+            const auto* e = dynamic_cast<Zuno::MouseScrolledEvent*>(&event);
             std::cout << "MouseMovedEvent: " << "X: " << e->GetXOffset() << "Y: " << e->GetYOffset() << std::endl;
             break;
         }
@@ -71,7 +71,7 @@ int main()
     // 2. Gameloop
     // 3. Destroy
 
-    Window window("Zuno", 640, 480);
+    Zuno::Window window("Zuno", 640, 480);
     window.SetEventCallback(OnEvent);
 
     while (!window.ShouldClose())

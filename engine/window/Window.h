@@ -7,31 +7,35 @@
 #include <string>
 #include <functional>
 
-class Event;
 class GLFWwindow;
 
-class Window
+namespace Zuno
 {
-public:
-    Window(const std::string& title, uint32_t width, uint32_t height, bool maximize = false);
-    ~Window();
+    class Event;
 
-    [[nodiscard]] bool ShouldClose() const;
+    class Window
+    {
+    public:
+        Window(const std::string& title, uint32_t width, uint32_t height, bool maximize = false);
+        ~Window();
 
-    void SetShouldClose(bool value) const;
+        [[nodiscard]] bool ShouldClose() const;
 
-    void PollEvents();
-    void DispatchEvent(Event& event) const { if (m_EventCallback) m_EventCallback(event); }
+        void SetShouldClose(bool value) const;
 
-    template<typename Fn>
-    void SetEventCallback(Fn&& eventFn) { m_EventCallback = std::forward<Fn>(eventFn); }
+        void PollEvents();
+        void DispatchEvent(Event& event) const { if (m_EventCallback) m_EventCallback(event); }
 
-private:
-    void RegisterCallbacks() const;
+        template<typename Fn>
+        void SetEventCallback(Fn&& eventFn) { m_EventCallback = std::forward<Fn>(eventFn); }
 
-private:
-    GLFWwindow* m_GLFWwindow = nullptr;
+    private:
+        void RegisterCallbacks() const;
 
-    uint32_t m_Width, m_Height;
-    std::function<void(Event&)> m_EventCallback = nullptr;
-};
+    private:
+        GLFWwindow* m_GLFWwindow = nullptr;
+
+        uint32_t m_Width, m_Height;
+        std::function<void(Event&)> m_EventCallback = nullptr;
+    };
+}
