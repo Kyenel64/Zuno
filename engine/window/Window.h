@@ -21,6 +21,7 @@ public:
     void SetShouldClose(bool value) const;
 
     void PollEvents();
+    void DispatchEvent(Event& event) const { if (m_EventCallback) m_EventCallback(event); }
 
     template<typename Fn>
     void SetEventCallback(Fn&& eventFn) { m_EventCallback = std::forward<Fn>(eventFn); }

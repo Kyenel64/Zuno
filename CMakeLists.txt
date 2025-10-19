@@ -13,3 +13,6 @@ add_executable(
 target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/engine)
 target_link_libraries(Zuno PRIVATE ZunoEngine)
 
+# tests
+enable_testing()
+add_subdirectory(tests)
