@@ -4,8 +4,7 @@
 
 #include <iostream>
 
-#include "Engine/Event.h"
-#include "Engine/Window.h"
+#include "ZunoEngine.h"
 
 // Temp
 void OnEvent(Event& event)

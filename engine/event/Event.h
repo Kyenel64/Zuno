@@ -3,8 +3,9 @@
 //
 
 #pragma once
-#include "../Input/Key.h"
-#include "../Input/MouseButton.h"
+
+#include "input/Key.h"
+#include "input/MouseButton.h"
 
 enum class EventType
 {

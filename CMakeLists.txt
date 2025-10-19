@@ -4,16 +4,12 @@ project(Zuno CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include(deps.cmake)
+add_subdirectory(engine)
 
 add_executable(
         Zuno
-        src/main.cpp
-        src/Engine/Window.h
-        src/Engine/Window.cpp
-        src/Engine/Event.h
-        src/Input/Key.h
-        src/Input/MouseButton.h
+        main.cpp
 )
+target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/engine)
+target_link_libraries(Zuno PRIVATE ZunoEngine)
 
-target_link_libraries(Zuno PRIVATE glfw)

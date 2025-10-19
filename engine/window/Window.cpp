@@ -8,7 +8,7 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
-#include "Event.h"
+#include "event/Event.h"
 
 static void GLFWErrorCallback(const int error, const char* desc)
 {
