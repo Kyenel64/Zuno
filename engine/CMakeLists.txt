@@ -17,3 +17,11 @@ add_library(ZunoEngine STATIC
 )
 target_include_directories(ZunoEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(ZunoEngine PRIVATE glfw PUBLIC spdlog)
+
+if (APPLE)
+    add_compile_definitions(ZUNO_APPLE)
+elseif (WIN32)
+    add_compile_definitions(ZUNO_WINDOWS)
+elseif (UNIX)
+    add_compile_definitions(ZUNO_LINUX)
+endif()
