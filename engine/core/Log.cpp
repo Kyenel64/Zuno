@@ -2,6 +2,7 @@
 // Created by Kye Nelson on 10/20/25.
 //
 
+#include "core/ZunoPCH.h"
 #include "Log.h"
 
 #include <spdlog/sinks/stdout_color_sinks.h>

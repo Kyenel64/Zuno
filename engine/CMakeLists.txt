@@ -25,3 +25,5 @@ elseif (WIN32)
 elseif (UNIX)
     add_compile_definitions(ZUNO_LINUX)
 endif()
+
+target_precompile_headers(ZunoEngine PUBLIC core/ZunoPCH.h)
