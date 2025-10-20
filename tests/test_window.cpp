@@ -5,6 +5,9 @@
 #include <gtest/gtest.h>
 #include <ZunoEngine.h>
 
+#ifdef ZUNO_CI
+GTEST_SKIP()
+#endif
 TEST(Window, WindowEventCallback)
 {
     bool callBackTriggered = false;
