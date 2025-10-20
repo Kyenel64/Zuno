@@ -16,6 +16,7 @@ FetchContent_MakeAvailable(googletest)
 add_executable(
         ZunoTest
         test_window.cpp
+        test_log.cpp
 )
 target_link_libraries(ZunoTest PRIVATE ZunoEngine GTest::gtest_main)
 

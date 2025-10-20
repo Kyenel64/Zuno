@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include <ostream>
+#include "spdlog/fmt/bundled/base.h"
 
 namespace Zuno
 {
-    enum class Keycode: int
+    enum Keycode: int
     {
         // From GLFW3
         Space = 32,
@@ -142,9 +142,14 @@ namespace Zuno
         RightSuper = 347,
         Menu = 348
     };
-
-    inline std::ostream& operator<<(std::ostream& os, Keycode key)
-    {
-        return os << static_cast<int>(key);
-    }
 }
+
+template <>
+struct fmt::formatter<Zuno::Keycode> : fmt::formatter<int>
+{
+    auto format(const Zuno::Keycode key, fmt::format_context& ctx) const
+    {
+        return formatter<int>::format(key, ctx);
+    }
+};
+

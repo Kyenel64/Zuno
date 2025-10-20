@@ -12,6 +12,8 @@ add_library(ZunoEngine STATIC
         event/Event.h
         input/Key.h
         input/MouseButton.h
+        core/Log.h
+        core/Log.cpp
 )
 target_include_directories(ZunoEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(ZunoEngine PRIVATE glfw)
+target_link_libraries(ZunoEngine PRIVATE glfw PUBLIC spdlog)

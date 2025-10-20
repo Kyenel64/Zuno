@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include <ostream>
+#include "spdlog/fmt/bundled/base.h"
 
 namespace Zuno
 {
-    enum class MouseButton: int
+    enum MouseButton: int
     {
         Button0 = 0,
         Button1 = 1,
@@ -25,8 +25,13 @@ namespace Zuno
         Middle = Button2
     };
 
-    inline std::ostream& operator<<(std::ostream& os, MouseButton mouseButton)
-    {
-        return os << static_cast<int>(mouseButton);
-    }
 }
+
+template <>
+struct fmt::formatter<Zuno::MouseButton> : fmt::formatter<int>
+{
+    auto format(const Zuno::MouseButton mouseButton, fmt::format_context& ctx) const
+    {
+        return formatter<int>::format(mouseButton, ctx);
+    }
+};
