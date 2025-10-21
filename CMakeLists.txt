@@ -1,18 +1,39 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(Zuno CXX)
+project(Zuno C CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(engine)
 
-add_executable(
-        Zuno
-        main.cpp
+### Deps
+include(FetchContent)
+FetchContent_Declare(
+        sol2
+        GIT_REPOSITORY "https://github.com/ThePhD/sol2.git"
+        GIT_TAG "v3.5.0"
 )
-target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/engine)
-target_link_libraries(Zuno PRIVATE ZunoEngine)
+FetchContent_MakeAvailable(sol2)
 
-# tests
-enable_testing()
-add_subdirectory(tests)
+# Lua
+FetchContent_Declare(
+        lua
+        GIT_REPOSITORY "https://github.com/lua/lua.git"
+        GIT_TAG "v5.4.8"
+)
+FetchContent_MakeAvailable(lua)
+file(GLOB LUA_SRC
+        ${lua_SOURCE_DIR}/*.c
+)
+list(REMOVE_ITEM LUA_SRC
+        ${lua_SOURCE_DIR}/luac.c
+        ${lua_SOURCE_DIR}/lua.c
+)
+add_library(lua_static STATIC ${LUA_SRC})
+target_include_directories(lua_static PUBLIC ${lua_SOURCE_DIR})
+
+# Your executable
+add_executable(Zuno main.cpp)
+target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/engine)
+target_link_libraries(Zuno PRIVATE ZunoEngine sol2 lua_static)
+

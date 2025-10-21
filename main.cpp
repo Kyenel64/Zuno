@@ -3,81 +3,66 @@
 //
 
 #include <iostream>
+#include <filesystem>
+
+#define SOL_ALL_SAFETIES_ON 1
+#include <sol/sol.hpp>
 
 #include "ZunoEngine.h"
 
-// Temp
-void OnEvent(Zuno::Event& event)
+int main(int argc, char* argv[])
 {
-    switch (event.GetType())
+    std::filesystem::path entrypointPath;
+    if (argc == 2)
     {
-    case Zuno::EventType::WindowClose:
+        entrypointPath = argv[1];
+        entrypointPath = std::filesystem::weakly_canonical(std::filesystem::current_path() / entrypointPath);
+        if (!std::filesystem::exists(entrypointPath))
         {
-            ZUNO_INFO("WindowClosedEvent");
-            break;
+            std::cerr << "Zuno: Cannot find file at: " << entrypointPath.c_str() << std::endl;
+            return 1;
         }
-    case Zuno::EventType::WindowResize:
-        {
-            const auto* e = dynamic_cast<Zuno::WindowResizedEvent*>(&event);
-            ZUNO_TRACE("WindowResizedEvent: w: {0}, h: {1}", e->GetWidth(), e->GetHeight());
-            break;
-        }
-    case Zuno::EventType::KeyPressed:
-        {
-            const auto* e = dynamic_cast<Zuno::KeyPressedEvent*>(&event);
-            ZUNO_TRACE("KeyPressedEvent: key: {0}", e->GetKey());
-            break;
-        }
-    case Zuno::EventType::KeyReleased:
-        {
-            const auto* e = dynamic_cast<Zuno::KeyReleasedEvent*>(&event);
-            ZUNO_TRACE("KeyReleasedEvent: key: {0}", e->GetKey());
-            break;
-        }
-    case Zuno::EventType::MouseButtonPressed:
-        {
-            const auto* e = dynamic_cast<Zuno::MouseButtonPressedEvent*>(&event);
-            ZUNO_TRACE("MouseButtonPressedEvent: mouseButton: {0}", e->GetMouseButton());
-            break;
-        }
-    case Zuno::EventType::MouseButtonReleased:
-        {
-            const auto* e = dynamic_cast<Zuno::MouseButtonReleasedEvent*>(&event);
-            ZUNO_TRACE("MouseButtonReleasedEvent: mouseButton: {0}", e->GetMouseButton());
-            break;
-        }
-    case Zuno::EventType::MouseScrolled:
-        {
-            const auto* e = dynamic_cast<Zuno::MouseScrolledEvent*>(&event);
-            ZUNO_TRACE("MouseScrolledEvent: x: {0}, y: {1}", e->GetXOffset(), e->GetYOffset());
-            break;
-        }
-    default:
-        break;
     }
-}
-
-int main()
-{
-    // 1. Initialize subsystems (window, graphics, lua, console, etc.)
-    // 2. Gameloop
-    // 3. Destroy
 
     Zuno::Log::Init();
     ZUNO_INFO("Welcome to Zuno!");
-    ZUNO_INFO("Info");
-    ZUNO_TRACE("Trace");
-    ZUNO_WARN("Warn");
-    ZUNO_ERROR("Error");
 
     Zuno::Window window("Zuno", 640, 480);
-    window.SetEventCallback(OnEvent);
+
+    // Load Lua API
+    sol::state lua;
+    lua.open_libraries(sol::lib::base);
+
+    lua["zuno"] = lua.create_table_with(
+        "quit", [&]() { window.SetShouldClose(true); }
+    );
+
+    lua["zuno"]["window"] = lua.create_table_with(
+        "is_open", [&]() { return !window.ShouldClose(); }
+    );
+
+    const sol::function loadFn = lua["zuno"]["load"];
+    const sol::function updateFn = lua["zuno"]["update"];
+    const sol::function drawFn = lua["zuno"]["draw"];
+
+    window.SetEventCallback([&](Zuno::Event& event)
+    {
+        if (event.GetType() == Zuno::EventType::KeyPressed)
+        {
+            const sol::function keyPressedFn = lua["zuno"]["key_pressed"];
+            const auto* e = dynamic_cast<Zuno::KeyPressedEvent*>(&event);
+            keyPressedFn(e->GetKey());
+        }
+    });
+
+    lua.script_file(entrypointPath);
+
+    loadFn();
 
     while (!window.ShouldClose())
     {
         window.PollEvents();
-
-        // Update()
-        // Render()
+        updateFn(10);
+        drawFn();
     }
 }
