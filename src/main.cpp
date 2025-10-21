@@ -8,7 +8,7 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
 
-#include "ZunoEngine.h"
+#include <ZunoEngine.h>
 
 int main(int argc, char* argv[])
 {
@@ -25,9 +25,8 @@ int main(int argc, char* argv[])
     }
 
     Zuno::Log::Init();
-    ZUNO_INFO("Welcome to Zuno!");
-
     Zuno::Window window("Zuno", 640, 480);
+    ZUNO_INFO("ZunoEngine initialized");
 
     // Load Lua API
     sol::state lua;
@@ -40,6 +39,8 @@ int main(int argc, char* argv[])
     lua["zuno"]["window"] = lua.create_table_with(
         "is_open", [&]() { return !window.ShouldClose(); }
     );
+
+    lua.safe_script_file(entrypointPath);
 
     const sol::function loadFn = lua["zuno"]["load"];
     const sol::function updateFn = lua["zuno"]["update"];
@@ -55,10 +56,10 @@ int main(int argc, char* argv[])
         }
     });
 
-    lua.script_file(entrypointPath);
+    ZUNO_INFO("Lua initialized");
+
 
     loadFn();
-
     while (!window.ShouldClose())
     {
         window.PollEvents();

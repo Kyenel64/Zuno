@@ -4,7 +4,7 @@ project(Zuno C CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(engine)
+add_subdirectory(src/engine)
 
 ### Deps
 include(FetchContent)
@@ -33,7 +33,7 @@ add_library(lua_static STATIC ${LUA_SRC})
 target_include_directories(lua_static PUBLIC ${lua_SOURCE_DIR})
 
 # Your executable
-add_executable(Zuno main.cpp)
-target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/engine)
+add_executable(Zuno src/main.cpp)
+target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(Zuno PRIVATE ZunoEngine sol2 lua_static)
 
