@@ -2,7 +2,7 @@ i = 0
 
 function zuno.load()
     print("Called from Lua!")
-    print(zuno.window.is_open())
+    print(zuno.window.should_close())
 end
 
 function zuno.update(dt)

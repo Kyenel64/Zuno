@@ -32,8 +32,12 @@ list(REMOVE_ITEM LUA_SRC
 add_library(lua_static STATIC ${LUA_SRC})
 target_include_directories(lua_static PUBLIC ${lua_SOURCE_DIR})
 
-# Your executable
-add_executable(Zuno src/main.cpp)
+# Zuno exe
+add_executable(Zuno
+        src/main.cpp
+        src/scripting/ScriptEngine.cpp
+        src/scripting/ScriptEngine.h
+)
 target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(Zuno PRIVATE ZunoEngine sol2 lua_static)
 

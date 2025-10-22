@@ -5,65 +5,95 @@
 #include <iostream>
 #include <filesystem>
 
-#define SOL_ALL_SAFETIES_ON 1
-#include <sol/sol.hpp>
-
 #include <ZunoEngine.h>
+#include "scripting/ScriptEngine.h"
+
+#define RED "\033[31m"
+
+static void PrintUsage()
+{
+    std::cout << "Usage: \n" << std::endl;
+    std::cout << "  zuno <path-to-scene-file>" << std::endl;
+    std::cout << "\n";
+    std::cout << "Specify a lua file as an entrypoint to your game." << std::endl;
+}
+
+static void ProcessArgs(int argc, char* argv[], int& retValue, std::filesystem::path& entryPath)
+{
+    if (argc <= 1)
+    {
+        std::cerr << RED << "Zuno error: no lua file provided. Use --help for list of commands" << std::endl;
+        retValue = 1;
+        return;
+    }
+    if (strcmp(argv[1], "--help") == 0)
+    {
+        PrintUsage();
+        retValue = 0;
+        return;
+    }
+    entryPath = argv[1];
+    entryPath = std::filesystem::weakly_canonical(std::filesystem::current_path() / entryPath);
+    if (!std::filesystem::exists(entryPath))
+    {
+        std::cerr << RED << "Zuno error: Cannot find file at: " << entryPath << std::endl;
+        retValue = 1;
+        return;
+    }
+    if (entryPath.extension() != ".lua")
+    {
+        std::cerr << RED << "Zuno error: Entrypoint must be a .lua file: " << entryPath << std::endl;
+        retValue = 1;
+        return;
+    }
+}
 
 int main(int argc, char* argv[])
 {
+    // --- Process args ---
     std::filesystem::path entrypointPath;
-    if (argc == 2)
-    {
-        entrypointPath = argv[1];
-        entrypointPath = std::filesystem::weakly_canonical(std::filesystem::current_path() / entrypointPath);
-        if (!std::filesystem::exists(entrypointPath))
-        {
-            std::cerr << "Zuno: Cannot find file at: " << entrypointPath.c_str() << std::endl;
-            return 1;
-        }
-    }
+    int retValue = -1;
+    ProcessArgs(argc, argv, retValue, entrypointPath);
+    if (retValue != -1)
+        return retValue;
 
+    // --- Init subsystems ---
     Zuno::Log::Init();
     Zuno::Window window("Zuno", 640, 480);
     ZUNO_INFO("ZunoEngine initialized");
 
-    // Load Lua API
-    sol::state lua;
-    lua.open_libraries(sol::lib::base);
 
-    lua["zuno"] = lua.create_table_with(
-        "quit", [&]() { window.SetShouldClose(true); }
-    );
+    // --- Init lua API ---
+    Zuno::ScriptEngine scriptEngine("zuno");
 
-    lua["zuno"]["window"] = lua.create_table_with(
-        "is_open", [&]() { return !window.ShouldClose(); }
-    );
+    scriptEngine.RegisterAPI("quit", [&]() { window.SetShouldClose(true); });
+    scriptEngine.RegisterAPI("window.should_close", [&]() { return window.ShouldClose(); });
 
-    lua.safe_script_file(entrypointPath);
+    scriptEngine.LoadScript(entrypointPath);
 
-    const sol::function loadFn = lua["zuno"]["load"];
-    const sol::function updateFn = lua["zuno"]["update"];
-    const sol::function drawFn = lua["zuno"]["draw"];
+    scriptEngine.RegisterScriptFunction("load");
+    scriptEngine.RegisterScriptFunction("update");
+    scriptEngine.RegisterScriptFunction("draw");
+    scriptEngine.RegisterScriptFunction("key_pressed");
 
     window.SetEventCallback([&](Zuno::Event& event)
     {
         if (event.GetType() == Zuno::EventType::KeyPressed)
         {
-            const sol::function keyPressedFn = lua["zuno"]["key_pressed"];
             const auto* e = dynamic_cast<Zuno::KeyPressedEvent*>(&event);
-            keyPressedFn(e->GetKey());
+            scriptEngine.CallFunction("key_pressed", e->GetKey());
         }
     });
 
     ZUNO_INFO("Lua initialized");
 
 
-    loadFn();
+    // --- Main loop ---
+    scriptEngine.CallFunction("load");
     while (!window.ShouldClose())
     {
         window.PollEvents();
-        updateFn(10);
-        drawFn();
+        scriptEngine.CallFunction("update", 10);
+        scriptEngine.CallFunction("draw");
     }
 }
