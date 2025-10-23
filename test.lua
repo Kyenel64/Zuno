@@ -24,6 +24,6 @@ function zuno.resize(w, h)
     print(w, h)
 end
 
-function zuno.quit()
+function zuno.on_quit()
     print("Quit!")
 end

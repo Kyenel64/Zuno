@@ -6,7 +6,6 @@
 #include <filesystem>
 
 #include <ZunoEngine.h>
-#include "scripting/ScriptEngine.h"
 
 #define RED "\033[31m"
 
@@ -74,7 +73,7 @@ int main(int argc, char* argv[])
     scriptEngine.RegisterScriptFunction("load");
     scriptEngine.RegisterScriptFunction("update");
     scriptEngine.RegisterScriptFunction("draw");
-    scriptEngine.RegisterScriptFunction("quit");
+    scriptEngine.RegisterScriptFunction("on_quit");
     scriptEngine.RegisterScriptFunction("resize");
     scriptEngine.RegisterScriptFunction("key_pressed");
     scriptEngine.RegisterScriptFunction("key_released");
@@ -145,7 +144,7 @@ int main(int argc, char* argv[])
         scriptEngine.CallFunction("update");
         scriptEngine.CallFunction("draw");
     }
-    scriptEngine.CallFunction("quit");
+    scriptEngine.CallFunction("on_quit");
 
     return 0;
 }

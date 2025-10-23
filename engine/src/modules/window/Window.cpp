@@ -6,10 +6,10 @@
 #include "Window.h"
 
 #include <cassert>
-#include <iostream>
+
 #include <GLFW/glfw3.h>
 
-#include "event/Event.h"
+#include "modules/event/Event.h"
 
 namespace Zuno
 {

@@ -2,6 +2,7 @@
 // Created by Kye Nelson on 10/21/25.
 //
 
+#include "core/ZunoPCH.h"
 #include "ScriptEngine.h"
 
 namespace Zuno
