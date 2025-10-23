@@ -1,5 +1,3 @@
-i = 0
-
 function zuno.load()
     print("Called from Lua!")
     print(zuno.window.should_close())
@@ -16,4 +14,16 @@ function zuno.key_pressed(key)
     if key == 256 then
         zuno.quit()
     end
+end
+
+function zuno.mouse_pressed(mb)
+    print(mb)
+end
+
+function zuno.resize(w, h)
+    print(w, h)
+end
+
+function zuno.quit()
+    print("Quit!")
 end

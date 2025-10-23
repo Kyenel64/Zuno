@@ -74,18 +74,67 @@ int main(int argc, char* argv[])
     scriptEngine.RegisterScriptFunction("load");
     scriptEngine.RegisterScriptFunction("update");
     scriptEngine.RegisterScriptFunction("draw");
+    scriptEngine.RegisterScriptFunction("quit");
+    scriptEngine.RegisterScriptFunction("resize");
     scriptEngine.RegisterScriptFunction("key_pressed");
+    scriptEngine.RegisterScriptFunction("key_released");
+    scriptEngine.RegisterScriptFunction("mouse_pressed");
+    scriptEngine.RegisterScriptFunction("mouse_released");
+    scriptEngine.RegisterScriptFunction("mouse_moved");
+    scriptEngine.RegisterScriptFunction("mouse_scrolled");
 
     window.SetEventCallback([&](Zuno::Event& event)
     {
-        if (event.GetType() == Zuno::EventType::KeyPressed)
+        switch (event.GetType())
         {
-            const auto* e = dynamic_cast<Zuno::KeyPressedEvent*>(&event);
-            scriptEngine.CallFunction("key_pressed", e->GetKey());
+        case Zuno::EventType::WindowResize:
+            {
+                if (const auto* e = dynamic_cast<Zuno::WindowResizedEvent*>(&event))
+                    scriptEngine.CallFunction("resize", e->GetWidth(), e->GetHeight());
+                break;
+            }
+        case Zuno::EventType::KeyPressed:
+            {
+                if (const auto* e = dynamic_cast<Zuno::KeyPressedEvent*>(&event))
+                    scriptEngine.CallFunction("key_pressed", e->GetKey());
+                break;
+            }
+        case Zuno::EventType::KeyReleased:
+            {
+                if (const auto* e = dynamic_cast<Zuno::KeyReleasedEvent*>(&event))
+                    scriptEngine.CallFunction("key_released", e->GetKey());
+                break;
+            }
+        case Zuno::EventType::MouseButtonPressed:
+            {
+                if (const auto* e = dynamic_cast<Zuno::MouseButtonPressedEvent*>(&event))
+                    scriptEngine.CallFunction("mouse_pressed", e->GetMouseButton());
+                break;
+            }
+        case Zuno::EventType::MouseButtonReleased:
+            {
+                if (const auto* e = dynamic_cast<Zuno::MouseButtonReleasedEvent*>(&event))
+                    scriptEngine.CallFunction("mouse_released", e->GetMouseButton());
+                break;
+            }
+        case Zuno::EventType::MouseMoved:
+            {
+                if (const auto* e = dynamic_cast<Zuno::MouseMovedEvent*>(&event))
+                    scriptEngine.CallFunction("mouse_moved", e->GetXPos(), e->GetYPos());
+                break;
+            }
+        case Zuno::EventType::MouseScrolled:
+            {
+                if (const auto* e = dynamic_cast<Zuno::MouseScrolledEvent*>(&event))
+                    scriptEngine.CallFunction("mouse_scrolled", e->GetXOffset(), e->GetYOffset());
+                break;
+            }
+        default:
+            break;
         }
     });
 
-    ZUNO_INFO("Lua initialized");
+    ZUNO_INFO("Script Engine initialized");
 
 
     // --- Main loop ---
@@ -93,7 +142,10 @@ int main(int argc, char* argv[])
     while (!window.ShouldClose())
     {
         window.PollEvents();
-        scriptEngine.CallFunction("update", 10);
+        scriptEngine.CallFunction("update");
         scriptEngine.CallFunction("draw");
     }
+    scriptEngine.CallFunction("quit");
+
+    return 0;
 }

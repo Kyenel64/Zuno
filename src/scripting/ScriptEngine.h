@@ -26,7 +26,8 @@ namespace Zuno
         template <typename... Args>
         void CallFunction(const std::string& funcName, Args&&... args)
         {
-            m_CachedFunctions[funcName](std::forward<Args>(args)...);
+            if (m_CachedFunctions[funcName].valid())
+                m_CachedFunctions[funcName](std::forward<Args>(args)...);
         }
 
         template <typename Func>
