@@ -7,6 +7,8 @@
 
 #include <ZunoEngine.h>
 
+#include "ZunoApp.h"
+
 #define RED "\033[31m"
 
 static void PrintUsage()
@@ -49,102 +51,16 @@ static void ProcessArgs(int argc, char* argv[], int& retValue, std::filesystem::
 
 int main(int argc, char* argv[])
 {
-    // --- Process args ---
+    // Process command line args
     std::filesystem::path entrypointPath;
     int retValue = -1;
     ProcessArgs(argc, argv, retValue, entrypointPath);
     if (retValue != -1)
         return retValue;
 
-    // --- Init subsystems ---
-    Zuno::Log::Init();
-    Zuno::Window window("Zuno", 640, 480);
-    ZUNO_INFO("ZunoEngine initialized");
-
-
-    // --- Init lua API ---
-    Zuno::ScriptEngine scriptEngine("zuno");
-
-    scriptEngine.RegisterAPI("quit", [&]() { window.SetShouldClose(true); });
-    scriptEngine.RegisterAPI("window.should_close", [&]() { return window.ShouldClose(); });
-
-    scriptEngine.LoadScript(entrypointPath);
-
-    scriptEngine.RegisterScriptFunction("load");
-    scriptEngine.RegisterScriptFunction("update");
-    scriptEngine.RegisterScriptFunction("draw");
-    scriptEngine.RegisterScriptFunction("on_quit");
-    scriptEngine.RegisterScriptFunction("resize");
-    scriptEngine.RegisterScriptFunction("key_pressed");
-    scriptEngine.RegisterScriptFunction("key_released");
-    scriptEngine.RegisterScriptFunction("mouse_pressed");
-    scriptEngine.RegisterScriptFunction("mouse_released");
-    scriptEngine.RegisterScriptFunction("mouse_moved");
-    scriptEngine.RegisterScriptFunction("mouse_scrolled");
-
-    window.SetEventCallback([&](Zuno::Event& event)
-    {
-        switch (event.GetType())
-        {
-        case Zuno::EventType::WindowResize:
-            {
-                if (const auto* e = dynamic_cast<Zuno::WindowResizedEvent*>(&event))
-                    scriptEngine.CallFunction("resize", e->GetWidth(), e->GetHeight());
-                break;
-            }
-        case Zuno::EventType::KeyPressed:
-            {
-                if (const auto* e = dynamic_cast<Zuno::KeyPressedEvent*>(&event))
-                    scriptEngine.CallFunction("key_pressed", e->GetKey());
-                break;
-            }
-        case Zuno::EventType::KeyReleased:
-            {
-                if (const auto* e = dynamic_cast<Zuno::KeyReleasedEvent*>(&event))
-                    scriptEngine.CallFunction("key_released", e->GetKey());
-                break;
-            }
-        case Zuno::EventType::MouseButtonPressed:
-            {
-                if (const auto* e = dynamic_cast<Zuno::MouseButtonPressedEvent*>(&event))
-                    scriptEngine.CallFunction("mouse_pressed", e->GetMouseButton());
-                break;
-            }
-        case Zuno::EventType::MouseButtonReleased:
-            {
-                if (const auto* e = dynamic_cast<Zuno::MouseButtonReleasedEvent*>(&event))
-                    scriptEngine.CallFunction("mouse_released", e->GetMouseButton());
-                break;
-            }
-        case Zuno::EventType::MouseMoved:
-            {
-                if (const auto* e = dynamic_cast<Zuno::MouseMovedEvent*>(&event))
-                    scriptEngine.CallFunction("mouse_moved", e->GetXPos(), e->GetYPos());
-                break;
-            }
-        case Zuno::EventType::MouseScrolled:
-            {
-                if (const auto* e = dynamic_cast<Zuno::MouseScrolledEvent*>(&event))
-                    scriptEngine.CallFunction("mouse_scrolled", e->GetXOffset(), e->GetYOffset());
-                break;
-            }
-        default:
-            break;
-        }
-    });
-
-    ZUNO_INFO("Script Engine initialized");
-
-
-    // --- Main loop ---
-    scriptEngine.CallFunction("load");
-    while (!window.ShouldClose())
-    {
-        window.PollEvents();
-        scriptEngine.CallFunction("update");
-        scriptEngine.CallFunction("draw");
-    }
-    scriptEngine.CallFunction("on_quit");
+    ZunoApp app("Zuno", 640, 480);
+    app.LoadScript(entrypointPath);
+    app.Run();
 
     return 0;
 }

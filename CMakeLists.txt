@@ -9,6 +9,8 @@ add_subdirectory(engine)
 # Zuno exe
 add_executable(Zuno
         src/main.cpp
+        src/ZunoApp.h
+        src/ZunoApp.cpp
 )
 target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(Zuno PRIVATE ZunoEngine)
