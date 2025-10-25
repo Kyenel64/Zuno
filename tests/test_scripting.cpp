@@ -68,7 +68,7 @@ TEST(Scripting, ScriptString_Integration)
     Zuno::ScriptEngine scriptEngine("zuno");
 
     scriptEngine.RegisterAPI("test", []() { return "Test: ScriptString_Integration"; });
-    EXPECT_TRUE(scriptEngine.LoadScriptString("functionzuno.testFn() print(zuno.test()) end"));
+    EXPECT_TRUE(scriptEngine.LoadScriptString("function zuno.testFn() print(zuno.test()) end"));
     scriptEngine.RegisterScriptFunction("testFn");
     EXPECT_TRUE(scriptEngine.CallFunction("testFn"));
 }
