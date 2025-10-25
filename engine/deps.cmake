@@ -37,6 +37,7 @@ file(GLOB LUA_SRC
 list(REMOVE_ITEM LUA_SRC
         ${lua_SOURCE_DIR}/luac.c
         ${lua_SOURCE_DIR}/lua.c
+        ${lua_SOURCE_DIR}/onelua.c
 )
 add_library(lua_static STATIC ${LUA_SRC})
 target_include_directories(lua_static PUBLIC ${lua_SOURCE_DIR})
