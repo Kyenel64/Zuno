@@ -25,7 +25,7 @@ namespace Zuno
 
     bool ScriptEngine::LoadScript(const std::filesystem::path& path)
     {
-        sol::protected_function_result result = m_Lua.safe_script_file(path, LuaErrorHandler);
+        sol::protected_function_result result = m_Lua.safe_script_file(path.string(), LuaErrorHandler);
 
         if (!result.valid())
             return false;
