@@ -33,4 +33,4 @@ target_link_libraries(ZunoTest PRIVATE ZunoEngine GTest::gtest_main)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test.lua ${CMAKE_CURRENT_BINARY_DIR}/test.lua COPYONLY)
 
 include(GoogleTest)
-gtest_discover_tests(ZunoTest)
+add_test(NAME ZunoTests COMMAND ZunoTest)
