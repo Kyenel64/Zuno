@@ -9,22 +9,28 @@ include(FetchContent)
 FetchContent_Declare(
         googletest
         GIT_REPOSITORY "https://github.com/google/googletest"
-        GIT_TAG "52eb8108c5bdec04579160ae17225d66034bd723"
+        GIT_TAG "v1.17.0"
 )
+set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 set(SOURCES
         test_log.cpp
+        test_window.cpp
+        test_scripting.cpp
 )
 
 # Files to not test on CI
-if (NOT DEFINED ENV{GITHUB_ACTIONS})
-    list(APPEND SOURCES
+if (DEFINED ENV{GITHUB_ACTIONS})
+    list(REMOVE_ITEM SOURCES
             test_window.cpp
     )
 endif()
 add_executable(ZunoTest ${SOURCES})
 target_link_libraries(ZunoTest PRIVATE ZunoEngine GTest::gtest_main)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test.lua ${CMAKE_CURRENT_BINARY_DIR}/test.lua COPYONLY)
 
 include(GoogleTest)
 gtest_discover_tests(ZunoTest)

@@ -7,6 +7,14 @@
 
 namespace Zuno
 {
+    static sol::protected_function_result LuaErrorHandler(lua_State* state, sol::protected_function_result result)
+    {
+        const sol::error err = result;
+        ZUNO_ERROR("Lua Error: {0}", err.what());
+
+        return result;
+    }
+
     ScriptEngine::ScriptEngine(std::string nameSpace)
         : m_Namespace(std::move(nameSpace))
     {
@@ -17,15 +25,19 @@ namespace Zuno
 
     bool ScriptEngine::LoadScript(const std::filesystem::path& path)
     {
-        sol::protected_function_result result = m_Lua.safe_script_file(path, &sol::script_pass_on_error);
+        sol::protected_function_result result = m_Lua.safe_script_file(path, LuaErrorHandler);
 
         if (!result.valid())
-        {
-            const sol::error err = result;
-            std::cerr << "[Lua Error] " << err.what() << "\n";
             return false;
-        }
+        return true;
+    }
 
+    bool ScriptEngine::LoadScriptString(const std::string& script)
+    {
+        sol::protected_function_result result = m_Lua.safe_script(script, LuaErrorHandler);
+
+        if (!result.valid())
+            return false;
         return true;
     }
 

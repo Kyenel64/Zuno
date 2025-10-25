@@ -18,13 +18,16 @@ namespace Zuno
         sol::state& GetState() { return m_Lua; }
 
         bool LoadScript(const std::filesystem::path& path);
+        bool LoadScriptString(const std::string& script);
         void RegisterScriptFunction(const std::string& funcName);
 
         template <typename... Args>
-        void CallFunction(const std::string& funcName, Args&&... args)
+        bool CallFunction(const std::string& funcName, Args&&... args)
         {
-            if (m_CachedFunctions[funcName].valid())
-                m_CachedFunctions[funcName](std::forward<Args>(args)...);
+            if (!m_CachedFunctions[funcName].valid())
+                return false;
+            m_CachedFunctions[funcName](std::forward<Args>(args)...);
+            return true;
         }
 
         template <typename Func>
