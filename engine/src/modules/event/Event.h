@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "input/Key.h"
-#include "input/MouseButton.h"
+#include "modules/input/Key.h"
+#include "modules/input/MouseButton.h"
 
 namespace Zuno
 {

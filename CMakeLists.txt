@@ -1,18 +1,23 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(Zuno CXX)
+project(Zuno C CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(engine)
 
-add_executable(
-        Zuno
-        main.cpp
+# Zuno exe
+add_executable(Zuno
+        src/main.cpp
+        src/ZunoApp.h
+        src/ZunoApp.cpp
 )
-target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/engine)
+target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(Zuno PRIVATE ZunoEngine)
 
-# tests
-enable_testing()
-add_subdirectory(tests)
+# Tests
+option(ZUNO_BUILD_TESTS "Build zuno test" ON)
+if (ZUNO_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()

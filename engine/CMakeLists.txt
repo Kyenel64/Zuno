@@ -7,16 +7,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(deps.cmake)
 
 add_library(ZunoEngine STATIC
-        window/Window.h
-        window/Window.cpp
-        event/Event.h
-        input/Key.h
-        input/MouseButton.h
-        core/Log.h
-        core/Log.cpp
+        src/core/Log.h
+        src/core/Log.cpp
+        src/modules/window/Window.h
+        src/modules/window/Window.cpp
+        src/modules/event/Event.h
+        src/modules/input/Key.h
+        src/modules/input/MouseButton.h
+        src/modules/scripting/ScriptEngine.h
+        src/modules/scripting/ScriptEngine.cpp
 )
-target_include_directories(ZunoEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(ZunoEngine PRIVATE glfw PUBLIC spdlog)
+target_include_directories(ZunoEngine PUBLIC src/ include/)
+target_link_libraries(ZunoEngine PRIVATE glfw PUBLIC spdlog sol2 lua_static)
 
 if (APPLE)
     add_compile_definitions(ZUNO_APPLE)
@@ -26,4 +28,4 @@ elseif (UNIX)
     add_compile_definitions(ZUNO_LINUX)
 endif()
 
-target_precompile_headers(ZunoEngine PUBLIC core/ZunoPCH.h)
+target_precompile_headers(ZunoEngine PUBLIC src/core/ZunoPCH.h)
