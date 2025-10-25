@@ -13,8 +13,8 @@ namespace Zuno
 
     void Log::Init()
     {
-        if (spdlog::get("ZUNO"))
-            return;
+        if (spdlog::get("ZUNO")) return;
+
         spdlog::set_pattern("%^[%T] %n: %v%$");
 
         s_Logger = spdlog::stdout_color_mt("ZUNO");

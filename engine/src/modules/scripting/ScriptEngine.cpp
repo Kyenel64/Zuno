@@ -11,7 +11,6 @@ namespace Zuno
     {
         const sol::error err = result;
         ZUNO_ERROR("Lua Error: {0}", err.what());
-
         return result;
     }
 

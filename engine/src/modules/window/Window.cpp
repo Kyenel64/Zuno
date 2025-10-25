@@ -21,16 +21,14 @@ namespace Zuno
     Window::Window(const std::string& title, const uint32_t width, const uint32_t height, const bool maximize)
         : m_Width(width), m_Height(height)
     {
-        if (!glfwInit())
-            assert(false);
-
+        ZUNO_ASSERT(glfwInit(), "Failed to initialize glfw");
         glfwSetErrorCallback(GLFWErrorCallback);
 
         m_GLFWwindow = glfwCreateWindow(static_cast<int>(m_Width), static_cast<int>(m_Height), title.c_str(), nullptr, nullptr);
         if (!m_GLFWwindow)
         {
             glfwTerminate();
-            assert(false);
+            ZUNO_ASSERT(false, "Failed to create glfw window");
         }
 
         glfwMakeContextCurrent(m_GLFWwindow);

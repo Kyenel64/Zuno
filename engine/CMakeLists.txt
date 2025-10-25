@@ -28,4 +28,7 @@ elseif (UNIX)
     add_compile_definitions(ZUNO_LINUX)
 endif()
 
+add_compile_definitions($<$<CONFIG:Debug>:ZUNO_DEBUG>)
+add_compile_definitions($<$<CONFIG:Release>:ZUNO_RELEASE>)
+
 target_precompile_headers(ZunoEngine PUBLIC src/core/ZunoPCH.h)
