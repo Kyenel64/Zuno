@@ -8,7 +8,6 @@
 TEST(Log, LogPrimitives)
 {
     const char* str = "Hello world";
-    Zuno::Log::Init();
     ZUNO_INFO(1);
     ZUNO_TRACE("Hello world");
     ZUNO_WARN(true);
@@ -17,7 +16,6 @@ TEST(Log, LogPrimitives)
 
 TEST(Log, LogEnums)
 {
-    Zuno::Log::Init();
     ZUNO_INFO(Zuno::Keycode::A);
     ZUNO_TRACE(Zuno::MouseButton::Left);
     ZUNO_WARN(Zuno::Keycode::Space);

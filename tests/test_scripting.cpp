@@ -7,7 +7,6 @@
 
 TEST(Scripting, Init)
 {
-    Zuno::Log::Init();
     Zuno::ScriptEngine scriptEngine("zuno");
     const sol::state& state = scriptEngine.GetState();
     EXPECT_NE(state.lua_state(), nullptr);
@@ -15,7 +14,6 @@ TEST(Scripting, Init)
 
 TEST(Scripting, RegisterAPI)
 {
-    Zuno::Log::Init();
     Zuno::ScriptEngine scriptEngine("zuno");
     scriptEngine.RegisterAPI("test", []() { return 100; });
     constexpr int x = 30;
@@ -24,7 +22,6 @@ TEST(Scripting, RegisterAPI)
 
 TEST(Scripting, LoadScript)
 {
-    Zuno::Log::Init();
     Zuno::ScriptEngine scriptEngine("zuno");
 
     EXPECT_TRUE("test.lua"); // Make sure test.lua exist in bin directory
@@ -35,7 +32,6 @@ TEST(Scripting, LoadScript)
 
 TEST(Scripting, LoadScriptString)
 {
-    Zuno::Log::Init();
     Zuno::ScriptEngine scriptEngine("zuno");
 
     EXPECT_TRUE(scriptEngine.LoadScriptString("print('test')"));
@@ -45,7 +41,6 @@ TEST(Scripting, LoadScriptString)
 
 TEST(Scripting, CallScriptFunction)
 {
-    Zuno::Log::Init();
     Zuno::ScriptEngine scriptEngine("zuno");
 
     EXPECT_FALSE(scriptEngine.CallFunction("non_existing_function"));
@@ -53,7 +48,6 @@ TEST(Scripting, CallScriptFunction)
 
 TEST(Scripting, ScriptFile_Integration)
 {
-    Zuno::Log::Init();
     Zuno::ScriptEngine scriptEngine("zuno");
 
     scriptEngine.RegisterAPI("test", []() { return "Test: ScriptFile_Integration"; });
@@ -64,7 +58,6 @@ TEST(Scripting, ScriptFile_Integration)
 
 TEST(Scripting, ScriptString_Integration)
 {
-    Zuno::Log::Init();
     Zuno::ScriptEngine scriptEngine("zuno");
 
     scriptEngine.RegisterAPI("test", []() { return "Test: ScriptString_Integration"; });
