@@ -4,7 +4,7 @@
 
 #include "ZunoApp.h"
 
-constexpr double MS_PER_UPDATE = 1000.0 / 60.0; // 60 updates/sec
+constexpr double MS_PER_UPDATE = 1000.0f / 60.0f; // 60 FPS
 
 ZunoApp::ZunoApp(std::string title, const uint32_t width, const uint32_t height)
     : m_Title(std::move(title))
