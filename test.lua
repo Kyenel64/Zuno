@@ -3,6 +3,9 @@ function zuno.load()
     print(zuno.window.should_close())
 end
 
+function zuno.fixed_update()
+end
+
 function zuno.update(dt)
 end
 

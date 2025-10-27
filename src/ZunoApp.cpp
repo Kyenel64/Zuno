@@ -4,6 +4,8 @@
 
 #include "ZunoApp.h"
 
+constexpr double MS_PER_UPDATE = 1000.0 / 60.0; // 60 updates/sec
+
 ZunoApp::ZunoApp(std::string title, const uint32_t width, const uint32_t height)
     : m_Title(std::move(title))
 {
@@ -32,14 +34,38 @@ void ZunoApp::LoadScript(std::filesystem::path entrypoint)
     RegisterScriptFunctions();
 }
 
-
 void ZunoApp::Run()
 {
     m_ScriptEngine->CallFunction("load");
+
+    using clock = std::chrono::high_resolution_clock;
+    auto previous = clock::now();
+    double lag = 0.0f;
+
     while (!m_Window->ShouldClose())
     {
+        auto current = clock::now();
+        const double elapsed = std::chrono::duration<double, std::milli>(current - previous).count();
+        previous = current;
+        lag += elapsed;
+
+        // Process input
         m_Window->PollEvents();
-        m_ScriptEngine->CallFunction("update");
+
+        // Fixed update
+        int updateCount = 0;
+        while (lag >= MS_PER_UPDATE && updateCount < 5)
+        {
+            m_ScriptEngine->CallFunction("fixed_update");
+            lag -= MS_PER_UPDATE;
+            updateCount++;
+        }
+
+        // Update
+        m_ScriptEngine->CallFunction("update", elapsed / 1000.0f);
+
+        // Draw
+        // double alpha = lag / 16; TODO: Alpha interpolate
         m_ScriptEngine->CallFunction("draw");
     }
     m_ScriptEngine->CallFunction("on_quit");
@@ -99,12 +125,14 @@ void ZunoApp::OnEvent(Zuno::Event& event)
 void ZunoApp::RegisterAPI() const
 {
     m_ScriptEngine->RegisterAPI("quit", [this]() { m_Window->SetShouldClose(true); });
+    m_ScriptEngine->RegisterAPI("wait", [](const int seconds) { std::this_thread::sleep_for(std::chrono::seconds(seconds));});
     m_ScriptEngine->RegisterAPI("window.should_close", [this]() { return m_Window->ShouldClose(); });
 }
 
 void ZunoApp::RegisterScriptFunctions() const
 {
     m_ScriptEngine->RegisterScriptFunction("load");
+    m_ScriptEngine->RegisterScriptFunction("fixed_update");
     m_ScriptEngine->RegisterScriptFunction("update");
     m_ScriptEngine->RegisterScriptFunction("draw");
     m_ScriptEngine->RegisterScriptFunction("on_quit");
