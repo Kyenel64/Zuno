@@ -7,7 +7,7 @@
 
 #include <ZunoEngine.h>
 
-#include "ZunoApp.h"
+#include "Engine.h"
 
 #define RED "\033[31m"
 
@@ -58,9 +58,9 @@ int main(int argc, char* argv[])
     if (retValue != -1)
         return retValue;
 
-    ZunoApp app("Zuno", 640, 480);
-    app.LoadScript(entrypointPath);
-    app.Run();
+    Zuno::Engine engine("Zuno", 640, 480);
+    engine.LoadScript(entrypointPath);
+    engine.Run();
 
     return 0;
 }

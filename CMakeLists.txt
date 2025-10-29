@@ -36,8 +36,8 @@ target_precompile_headers(ZunoEngine PUBLIC src/core/ZunoPCH.h)
 # Zuno exe
 add_executable(Zuno
         src/main.cpp
-        src/ZunoApp.h
-        src/ZunoApp.cpp
+        src/Engine.h
+        src/Engine.cpp
 )
 target_include_directories(Zuno PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(Zuno PRIVATE ZunoEngine)
