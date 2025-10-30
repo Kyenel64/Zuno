@@ -5,11 +5,14 @@
 #include "core/ZunoPCH.h"
 #include "Scene.h"
 
+#include "Components.h"
+
 namespace Zuno
 {
-    Entity Scene::CreateEntity()
+    Entity Scene::CreateEntity(const std::string& name)
     {
-        const entt::entity entity = m_Registry.create();
-        return Entity(entity);
+        auto entity = Entity(m_Registry.create());
+        AddComponent<TagComponent>(entity, name);
+        return entity;
     }
 }

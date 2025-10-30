@@ -15,6 +15,7 @@ namespace Zuno
 
         // Implicit conversion
         operator uint32_t() const { return static_cast<uint32_t>(m_Handle); }
+        operator entt::entity() const { return static_cast<entt::entity>(m_Handle); }
 
     protected:
         explicit Entity(const entt::entity handle): m_Handle(handle) {}

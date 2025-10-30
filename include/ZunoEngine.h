@@ -12,5 +12,7 @@
 #include "modules/event/Event.h"
 #include "modules/scripting/ScriptEngine.h"
 #include "modules/scene/Scene.h"
+#include "modules/scene/Entity.h"
+#include "modules/scene/Components.h"
 
 

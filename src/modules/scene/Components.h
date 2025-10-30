@@ -13,7 +13,7 @@ namespace Zuno
     {
         std::string Tag;
 
-        TagComponent();
+        TagComponent() = default;
         explicit TagComponent(std::string tag) : Tag(std::move(tag)) {}
         TagComponent(const TagComponent&) = default;
     };

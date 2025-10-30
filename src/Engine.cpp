@@ -131,7 +131,7 @@ namespace Zuno
         m_ScriptEngine->RegisterAPI("quit", [this]() { m_Window->SetShouldClose(true); });
         m_ScriptEngine->RegisterAPI("wait", [](const int seconds) { std::this_thread::sleep_for(std::chrono::seconds(seconds));});
         m_ScriptEngine->RegisterAPI("window.should_close", [this]() { return m_Window->ShouldClose(); });
-        m_ScriptEngine->RegisterAPI("create", [this]() { return m_Scene->CreateEntity(); });
+        m_ScriptEngine->RegisterAPI("create", [this](const std::string& name) { return m_Scene->CreateEntity(name); });
     }
 
     void Engine::RegisterScriptFunctions() const
