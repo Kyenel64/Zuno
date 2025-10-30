@@ -41,3 +41,10 @@ list(REMOVE_ITEM LUA_SRC
 )
 add_library(lua_static STATIC ${LUA_SRC})
 target_include_directories(lua_static PUBLIC ${lua_SOURCE_DIR})
+
+FetchContent_Declare(
+        entt
+        GIT_REPOSITORY "https://github.com/skypjack/entt"
+        GIT_TAG "v3.15.0"
+)
+FetchContent_MakeAvailable(entt)

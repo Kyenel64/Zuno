@@ -16,9 +16,12 @@ add_library(ZunoEngine STATIC
         src/modules/input/MouseButton.h
         src/modules/scripting/ScriptEngine.h
         src/modules/scripting/ScriptEngine.cpp
+        src/modules/scene/Scene.h
+        src/modules/scene/Scene.cpp
+        src/modules/scene/Entity.h
 )
 target_include_directories(ZunoEngine PUBLIC src/ include/)
-target_link_libraries(ZunoEngine PRIVATE glfw PUBLIC spdlog sol2 lua_static)
+target_link_libraries(ZunoEngine PRIVATE glfw PUBLIC spdlog sol2 lua_static EnTT::EnTT)
 
 if (APPLE)
     add_compile_definitions(ZUNO_APPLE)

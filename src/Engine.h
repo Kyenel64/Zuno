@@ -30,5 +30,6 @@ namespace Zuno
 
         Window* m_Window = nullptr;
         ScriptEngine* m_ScriptEngine = nullptr;
+        Scene* m_Scene = nullptr;
     };
 }

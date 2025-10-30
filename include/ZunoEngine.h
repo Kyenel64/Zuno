@@ -11,5 +11,6 @@
 #include "modules/input/MouseButton.h"
 #include "modules/event/Event.h"
 #include "modules/scripting/ScriptEngine.h"
+#include "modules/scene/Scene.h"
 
 

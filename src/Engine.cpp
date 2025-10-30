@@ -14,6 +14,7 @@ namespace Zuno
         Log::Init();
         m_Window = new Window(m_Title, width, height);
         m_ScriptEngine = new ScriptEngine("zuno");
+        m_Scene = new Scene();
 
         RegisterAPI();
 
@@ -24,6 +25,7 @@ namespace Zuno
 
     Engine::~Engine()
     {
+        delete m_Scene;
         delete m_ScriptEngine;
         delete m_Window;
         ZUNO_INFO("ZunoEngine shutdown");
@@ -129,6 +131,7 @@ namespace Zuno
         m_ScriptEngine->RegisterAPI("quit", [this]() { m_Window->SetShouldClose(true); });
         m_ScriptEngine->RegisterAPI("wait", [](const int seconds) { std::this_thread::sleep_for(std::chrono::seconds(seconds));});
         m_ScriptEngine->RegisterAPI("window.should_close", [this]() { return m_Window->ShouldClose(); });
+        m_ScriptEngine->RegisterAPI("create", [this]() { return m_Scene->CreateEntity(); });
     }
 
     void Engine::RegisterScriptFunctions() const
