@@ -14,7 +14,7 @@ namespace Zuno
         explicit Engine(std::string title, uint32_t width, uint32_t height);
         ~Engine();
 
-        void Run();
+        void Run() const;
 
         void LoadScript(std::filesystem::path entrypoint);
 

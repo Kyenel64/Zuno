@@ -38,7 +38,7 @@ namespace Zuno
         RegisterScriptFunctions();
     }
 
-    void Engine::Run()
+    void Engine::Run() const
     {
         m_ScriptEngine->CallFunction("load");
 

@@ -19,6 +19,7 @@ add_library(ZunoEngine STATIC
         src/modules/scene/Scene.h
         src/modules/scene/Scene.cpp
         src/modules/scene/Entity.h
+        src/modules/scene/Components.h
 )
 target_include_directories(ZunoEngine PUBLIC src/ include/)
 target_link_libraries(ZunoEngine PRIVATE glfw PUBLIC spdlog sol2 lua_static EnTT::EnTT)
