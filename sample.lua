@@ -2,8 +2,7 @@ function zuno.load()
     print("Called from Lua!")
     print(zuno.window.should_close())
 
-    enemy = zuno.create("Enemy 1");
-    print(enemy)
+    print("Handle: ", self.Handle)
 end
 
 function zuno.fixed_update()

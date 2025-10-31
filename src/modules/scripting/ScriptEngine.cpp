@@ -7,13 +7,6 @@
 
 namespace Zuno
 {
-    static sol::protected_function_result LuaErrorHandler(lua_State* state, sol::protected_function_result result)
-    {
-        const sol::error err = result;
-        ZUNO_ERROR("Lua Error: {0}", err.what());
-        return result;
-    }
-
     ScriptEngine::ScriptEngine(std::string nameSpace)
         : m_Namespace(std::move(nameSpace))
     {
@@ -22,18 +15,37 @@ namespace Zuno
     }
 
 
-    bool ScriptEngine::LoadScript(const std::filesystem::path& path)
+    bool ScriptEngine::LoadScript(const std::filesystem::path& path, Entity entity)
     {
-        sol::protected_function_result result = m_Lua.safe_script_file(path.string(), LuaErrorHandler);
+        sol::environment env(m_Lua, sol::create, m_Lua.globals());
+        env["self"] = entity;
 
-        if (!result.valid())
+        const sol::load_result chunk = m_Lua.load_file(path.string());
+        if (!chunk.valid())
+        {
+            sol::error err = chunk;
+            ZUNO_ERROR("Failed to load script '{0}': {1}", path.string(), err.what());
             return false;
+        }
+
+        const sol::protected_function func = chunk;
+
+        sol::set_environment(env, func);
+
+        const sol::protected_function_result result = func();
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ZUNO_ERROR("Failed to run script '{0}': {1}", path.string(), err.what());
+            return false;
+        }
+
         return true;
     }
 
     bool ScriptEngine::LoadScriptString(const std::string& script)
     {
-        sol::protected_function_result result = m_Lua.safe_script(script, LuaErrorHandler);
+        sol::protected_function_result result = m_Lua.safe_script(script);
 
         if (!result.valid())
             return false;

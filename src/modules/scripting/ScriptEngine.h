@@ -7,9 +7,31 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
 
+#include "modules/scene/Entity.h"
+
 
 namespace Zuno
 {
+    template<typename T>
+    struct UserType
+    {
+        sol::usertype<T> Type;
+        std::string ClassName;
+
+        template<typename Func>
+        void SetPropertyReadOnly(const std::string& propName, Func prop)
+        {
+            Type.set(propName, sol::readonly_property(prop));
+        }
+
+        template<typename Func>
+        void SetFunction(const std::string& propName, Func prop)
+        {
+            Type.set(propName, prop);
+        }
+    };
+
+
     class ScriptEngine
     {
     public:
@@ -17,9 +39,16 @@ namespace Zuno
 
         sol::state& GetState() { return m_Lua; }
 
-        bool LoadScript(const std::filesystem::path& path);
+        bool LoadScript(const std::filesystem::path& path, Entity entity);
         bool LoadScriptString(const std::string& script);
         void RegisterScriptFunction(const std::string& funcName);
+
+        template<typename T>
+        UserType<T> RegisterClassType(const std::string& name)
+        {
+            sol::usertype type =  m_Lua.new_usertype<T>(name);
+            return { type, name };
+        }
 
         template <typename... Args>
         bool CallFunction(const std::string& funcName, Args&&... args)
