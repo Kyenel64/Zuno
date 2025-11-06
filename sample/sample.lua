@@ -1,8 +1,12 @@
-function zuno.load()
+function load()
     print("Called from Lua!")
     print(zuno.window.should_close())
 
-    print("Handle: ", self.Handle)
+    print("Handle: ", self.handle)
+    print("Name: ", self.name)
+
+    enemy = zuno.create("Test", "../sample/entity_script.lua");
+    print(enemy.name)
 end
 
 function zuno.fixed_update()

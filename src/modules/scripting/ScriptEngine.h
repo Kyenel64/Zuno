@@ -21,13 +21,13 @@ namespace Zuno
         template<typename Func>
         void SetPropertyReadOnly(const std::string& propName, Func prop)
         {
-            Type.set(propName, sol::readonly_property(prop));
+            Type[propName] = sol::readonly_property(prop);
         }
 
         template<typename Func>
-        void SetFunction(const std::string& propName, Func prop)
+        void SetFunction(const std::string& funcName, Func func)
         {
-            Type.set(propName, prop);
+            Type[funcName] = func;
         }
     };
 
@@ -37,17 +37,15 @@ namespace Zuno
     public:
         explicit ScriptEngine(std::string nameSpace);
 
-        sol::state& GetState() { return m_Lua; }
-
-        bool LoadScript(const std::filesystem::path& path, Entity entity);
+        sol::environment LoadScript(const std::filesystem::path& path, Entity entity);
         bool LoadScriptString(const std::string& script);
         void RegisterScriptFunction(const std::string& funcName);
 
         template<typename T>
         UserType<T> RegisterClassType(const std::string& name)
         {
-            sol::usertype type =  m_Lua.new_usertype<T>(name);
-            return { type, name };
+            sol::usertype<T> type = m_Lua.new_usertype<T>(name);
+            return { std::move(type), name };
         }
 
         template <typename... Args>
@@ -56,6 +54,26 @@ namespace Zuno
             if (!m_CachedFunctions[funcName].valid())
                 return false;
             m_CachedFunctions[funcName](std::forward<Args>(args)...);
+            return true;
+        }
+
+        template <typename... Args>
+        bool CallEnvFunction(const std::string& funcName, const sol::environment& env, Args&&... args)
+        {
+            sol::optional<sol::protected_function> func = env[funcName];
+            if (!func)
+            {
+                ZUNO_WARN("Function '{0}' not found in environment", funcName);
+                return false;
+            }
+
+            sol::protected_function_result result = (*func)(std::forward<Args>(args)...);
+            if (!result.valid())
+            {
+                sol::error err = result;
+                ZUNO_ERROR("Error calling {0}(): {1}", funcName, err.what());
+                return false;
+            }
             return true;
         }
 

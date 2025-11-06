@@ -11,12 +11,12 @@ namespace Zuno
     class Engine
     {
     public:
-        explicit Engine(std::string title, uint32_t width, uint32_t height);
+        explicit Engine(std::string windowTitle, uint32_t width, uint32_t height);
         ~Engine();
 
         void Run() const;
 
-        void LoadScript(std::filesystem::path entrypoint);
+        void LoadEntrypoint(std::filesystem::path scriptPath);
 
         void OnEvent(Event& event);
 
@@ -25,8 +25,9 @@ namespace Zuno
         void RegisterScriptFunctions() const;
 
     private:
-        std::string m_Title;
+        std::string m_WindowTitle;
         std::filesystem::path m_Entrypoint;
+        Entity m_Root;
 
         Window* m_Window = nullptr;
         ScriptEngine* m_ScriptEngine = nullptr;

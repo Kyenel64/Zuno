@@ -15,32 +15,32 @@ namespace Zuno
     }
 
 
-    bool ScriptEngine::LoadScript(const std::filesystem::path& path, Entity entity)
+    sol::environment ScriptEngine::LoadScript(const std::filesystem::path& path, Entity entity)
     {
         sol::environment env(m_Lua, sol::create, m_Lua.globals());
         env["self"] = entity;
 
-        const sol::load_result chunk = m_Lua.load_file(path.string());
-        if (!chunk.valid())
-        {
-            sol::error err = chunk;
-            ZUNO_ERROR("Failed to load script '{0}': {1}", path.string(), err.what());
-            return false;
-        }
-
-        const sol::protected_function func = chunk;
-
-        sol::set_environment(env, func);
-
-        const sol::protected_function_result result = func();
+        const sol::load_result result = m_Lua.load_file(path.string());
         if (!result.valid())
         {
             sol::error err = result;
-            ZUNO_ERROR("Failed to run script '{0}': {1}", path.string(), err.what());
-            return false;
+            ZUNO_ERROR("Failed to load script '{0}': {1}", path.string(), err.what());
+            return env;
         }
 
-        return true;
+        const sol::protected_function func = result;
+
+        sol::set_environment(env, func);
+
+        const sol::protected_function_result funcResult = func();
+        if (!funcResult.valid())
+        {
+            sol::error err = funcResult;
+            ZUNO_ERROR("Failed to run script '{0}': {1}", path.string(), err.what());
+            return env;
+        }
+
+        return env;
     }
 
     bool ScriptEngine::LoadScriptString(const std::string& script)

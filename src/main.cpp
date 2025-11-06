@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
         return retValue;
 
     Zuno::Engine engine("Zuno", 640, 480);
-    engine.LoadScript(entrypointPath);
+    engine.LoadEntrypoint(entrypointPath);
     engine.Run();
 
     return 0;

@@ -8,13 +8,15 @@ constexpr double MS_PER_UPDATE = 1000.0f / 60.0f; // 60 FPS
 
 namespace Zuno
 {
-    Engine::Engine(std::string title, const uint32_t width, const uint32_t height)
-        : m_Title(std::move(title))
+    Engine::Engine(std::string windowTitle, const uint32_t width, const uint32_t height)
+        : m_WindowTitle(std::move(windowTitle))
     {
         Log::Init();
-        m_Window = new Window(m_Title, width, height);
+        m_Window = new Window(m_WindowTitle, width, height);
         m_ScriptEngine = new ScriptEngine("zuno");
         m_Scene = new Scene();
+
+        m_Root = m_Scene->CreateEntity("Root");
 
         RegisterAPI();
 
@@ -31,16 +33,19 @@ namespace Zuno
         ZUNO_INFO("ZunoEngine shutdown");
     }
 
-    void Engine::LoadScript(std::filesystem::path entrypoint)
+    void Engine::LoadEntrypoint(std::filesystem::path scriptPath)
     {
-        m_Entrypoint = std::move(entrypoint);
-        m_ScriptEngine->LoadScript(m_Entrypoint, m_Scene->GetRootEntity());
+        m_Entrypoint = std::move(scriptPath);
+
+        sol::environment env = m_ScriptEngine->LoadScript(m_Entrypoint, m_Root);
+        m_Scene->AddComponent<ScriptComponent>(m_Root, m_Entrypoint, env);
+
         RegisterScriptFunctions();
     }
 
     void Engine::Run() const
     {
-        m_ScriptEngine->CallFunction("load");
+        m_ScriptEngine->CallEnvFunction("load", m_Scene->GetComponent<ScriptComponent>(m_Root).Env);
 
         using clock = std::chrono::high_resolution_clock;
         auto previous = clock::now();
@@ -131,11 +136,26 @@ namespace Zuno
         // Global
         m_ScriptEngine->RegisterAPI("quit", [this]() { m_Window->SetShouldClose(true); });
         m_ScriptEngine->RegisterAPI("wait", [](const int seconds) { std::this_thread::sleep_for(std::chrono::seconds(seconds));});
-        m_ScriptEngine->RegisterAPI("window.should_close", [this]() { return m_Window->ShouldClose(); });
-        m_ScriptEngine->RegisterAPI("create", [this](const std::string& name) { return m_Scene->CreateEntity(name); });
+        m_ScriptEngine->RegisterAPI("create", [this](const std::string& name, const std::string& pathToScript) -> Entity
+        {
+            const Entity entity = m_Scene->CreateEntity(name);
+            if (!pathToScript.empty())
+            {
+                sol::environment env = m_ScriptEngine->LoadScript(pathToScript, entity);
+                m_Scene->AddComponent<ScriptComponent>(entity, pathToScript, env);
 
+                m_ScriptEngine->CallEnvFunction("load", m_Scene->GetComponent<ScriptComponent>(entity).Env);
+            }
+
+            ZUNO_TRACE("Created entity '{0}'", name);
+            return entity;
+        });
+        m_ScriptEngine->RegisterAPI("window.should_close", [this]() { return m_Window->ShouldClose(); });
+
+        // Entity
         UserType<Entity> entity = m_ScriptEngine->RegisterClassType<Entity>("Entity");
-        entity.SetPropertyReadOnly("Handle", &Entity::GetHandle);
+        entity.SetPropertyReadOnly("handle", &Entity::GetHandle);
+        entity.SetPropertyReadOnly("name", [this](Entity& self) { return m_Scene->GetComponent<TagComponent>(self).Tag; });
     }
 
     void Engine::RegisterScriptFunctions() const

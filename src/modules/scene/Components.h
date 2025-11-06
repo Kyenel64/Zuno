@@ -6,6 +6,7 @@
 
 #include <string>
 #include <filesystem>
+#include <sol/environment.hpp>
 
 namespace Zuno
 {
@@ -21,11 +22,11 @@ namespace Zuno
     struct ScriptComponent
     {
         std::filesystem::path Path;
+        sol::environment Env;
 
-        explicit ScriptComponent(std::filesystem::path path)
-            : Path(std::move(path))
-        {
-        }
+        explicit ScriptComponent(std::filesystem::path path, sol::environment env)
+            : Path(std::move(path)), Env(std::move(env)) {}
+
         ScriptComponent(const ScriptComponent&) = default;
     };
 }

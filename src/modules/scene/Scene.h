@@ -13,12 +13,10 @@ namespace Zuno
     class Scene
     {
     public:
-        Scene();
+        Scene() = default;
         ~Scene() = default;
 
         Entity CreateEntity(const std::string& name = "entity");
-
-        Entity GetRootEntity() const { return m_Root; }
 
         template<typename T, typename... Args>
         T& AddComponent(Entity entity, Args&&... args)
@@ -46,6 +44,5 @@ namespace Zuno
         }
     private:
         entt::registry m_Registry;
-        Entity m_Root;
     };
 }

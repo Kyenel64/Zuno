@@ -39,11 +39,11 @@ This will build the Zuno executable in `build/`
 Go to your build folder. <br>
 Run Zuno with `./Zuno /pathToMain.lua` <br>
 Zuno requires an entrypoint lua file as the first argument. <br>
-Zuno comes with a sample.lua in the root file. In your build folder, run `./Zuno ../sample.lua`
+Zuno comes with a sample.lua in the sample folder. In your build folder, run `./Zuno ../sample/sample.lua`
 
 Example
 ---
-Here is a sample Zuno lua file. It can also be found in the root directory of the project as `sample.lua`, so you can run it.
+Here is a sample Zuno lua file. It can also be found in the sample directory of the project as `sample.lua`, so you can run it.
 ```lua
 function zuno.load()
     print("Zuno game loaded!")

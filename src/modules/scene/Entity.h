@@ -11,7 +11,7 @@ namespace Zuno
     class Entity
     {
     public:
-        Entity() = delete;
+        Entity() = default;
         ~Entity() = default;
         Entity(const Entity&) = default;
 
