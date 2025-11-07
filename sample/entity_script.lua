@@ -2,9 +2,13 @@ function load()
     print("Entity: ", self.name, "load()");
 end
 
-function zuno.fixed_update()
-    print("Entity: ", self.name, "update()");
+function fixed_update()
+    --print("Entity: ", self.name, "update()");
 end
 
-function zuno.update(dt)
+function update(dt)
+end
+
+function key_pressed(key)
+    print("[Entity]: ", "Key pressed: ", key)
 end

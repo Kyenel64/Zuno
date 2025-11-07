@@ -9,30 +9,30 @@ function load()
     print(enemy.name)
 end
 
-function zuno.fixed_update()
+function fixed_update()
 end
 
-function zuno.update(dt)
+function update(dt)
 end
 
-function zuno.draw()
+function draw()
 end
 
-function zuno.key_pressed(key)
+function key_pressed(key)
     print("Key pressed: ", key)
     if key == 256 then
         zuno.quit()
     end
 end
 
-function zuno.mouse_pressed(mb)
+function mouse_pressed(mb)
     print(mb)
 end
 
-function zuno.resize(w, h)
+function resize(w, h)
     print(w, h)
 end
 
-function zuno.on_quit()
+function on_quit()
     print("Quit!")
 end

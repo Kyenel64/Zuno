@@ -12,13 +12,14 @@ namespace Zuno
         : m_WindowTitle(std::move(windowTitle))
     {
         Log::Init();
+
         m_Window = new Window(m_WindowTitle, width, height);
+
         m_ScriptEngine = new ScriptEngine("zuno");
-        m_Scene = new Scene();
-
-        m_Root = m_Scene->CreateEntity("Root");
-
         RegisterAPI();
+
+        m_Scene = new Scene(m_ScriptEngine);
+        m_Root = m_Scene->CreateEntity("Root");
 
         m_Window->SetEventCallback([&](Event& e) { OnEvent(e); });
 
@@ -35,17 +36,14 @@ namespace Zuno
 
     void Engine::LoadEntrypoint(std::filesystem::path scriptPath)
     {
-        m_Entrypoint = std::move(scriptPath);
-
-        sol::environment env = m_ScriptEngine->LoadScript(m_Entrypoint, m_Root);
-        m_Scene->AddComponent<ScriptComponent>(m_Root, m_Entrypoint, env);
-
-        RegisterScriptFunctions();
+        m_EntrypointPath = std::move(scriptPath);
+        m_Scene->AddComponent<ScriptComponent>(m_Root, m_EntrypointPath);
     }
+
 
     void Engine::Run() const
     {
-        m_ScriptEngine->CallEnvFunction("load", m_Scene->GetComponent<ScriptComponent>(m_Root).Env);
+        m_Scene->OnLoad();
 
         using clock = std::chrono::high_resolution_clock;
         auto previous = clock::now();
@@ -65,70 +63,24 @@ namespace Zuno
             int updateCount = 0;
             while (lag >= MS_PER_UPDATE && updateCount < 5)
             {
-                m_ScriptEngine->CallFunction("fixed_update");
+                m_Scene->OnFixedUpdate();
                 lag -= MS_PER_UPDATE;
                 updateCount++;
             }
 
             // Update
-            m_ScriptEngine->CallFunction("update", elapsed / 1000.0f);
+            m_Scene->OnUpdate(elapsed);
 
             // Draw
             // double alpha = lag / 16; TODO: Alpha interpolate
-            m_ScriptEngine->CallFunction("draw");
+            m_Scene->OnDraw();
         }
-        m_ScriptEngine->CallFunction("on_quit");
+        m_Scene->OnQuit();
     }
 
     void Engine::OnEvent(Event& event)
     {
-        switch (event.GetType())
-        {
-        case EventType::WindowResize:
-            {
-                if (const auto* e = dynamic_cast<WindowResizedEvent*>(&event))
-                    m_ScriptEngine->CallFunction("resize", e->GetWidth(), e->GetHeight());
-                break;
-            }
-        case EventType::KeyPressed:
-            {
-                if (const auto* e = dynamic_cast<KeyPressedEvent*>(&event))
-                    m_ScriptEngine->CallFunction("key_pressed", e->GetKey());
-                break;
-            }
-        case EventType::KeyReleased:
-            {
-                if (const auto* e = dynamic_cast<KeyReleasedEvent*>(&event))
-                    m_ScriptEngine->CallFunction("key_released", e->GetKey());
-                break;
-            }
-        case EventType::MouseButtonPressed:
-            {
-                if (const auto* e = dynamic_cast<MouseButtonPressedEvent*>(&event))
-                    m_ScriptEngine->CallFunction("mouse_pressed", e->GetMouseButton());
-                break;
-            }
-        case EventType::MouseButtonReleased:
-            {
-                if (const auto* e = dynamic_cast<MouseButtonReleasedEvent*>(&event))
-                    m_ScriptEngine->CallFunction("mouse_released", e->GetMouseButton());
-                break;
-            }
-        case EventType::MouseMoved:
-            {
-                if (const auto* e = dynamic_cast<MouseMovedEvent*>(&event))
-                    m_ScriptEngine->CallFunction("mouse_moved", e->GetXPos(), e->GetYPos());
-                break;
-            }
-        case EventType::MouseScrolled:
-            {
-                if (const auto* e = dynamic_cast<MouseScrolledEvent*>(&event))
-                    m_ScriptEngine->CallFunction("mouse_scrolled", e->GetXOffset(), e->GetYOffset());
-                break;
-            }
-        default:
-            break;
-        }
+        m_Scene->OnEvent(event);
     }
 
     void Engine::RegisterAPI() const
@@ -141,9 +93,8 @@ namespace Zuno
             const Entity entity = m_Scene->CreateEntity(name);
             if (!pathToScript.empty())
             {
-                sol::environment env = m_ScriptEngine->LoadScript(pathToScript, entity);
-                m_Scene->AddComponent<ScriptComponent>(entity, pathToScript, env);
-
+                m_Scene->AddComponent<ScriptComponent>(entity, pathToScript);
+                // Not sure if I should call load here. Maybe better to wait for next loop to call load before the updates?
                 m_ScriptEngine->CallEnvFunction("load", m_Scene->GetComponent<ScriptComponent>(entity).Env);
             }
 
@@ -156,21 +107,5 @@ namespace Zuno
         UserType<Entity> entity = m_ScriptEngine->RegisterClassType<Entity>("Entity");
         entity.SetPropertyReadOnly("handle", &Entity::GetHandle);
         entity.SetPropertyReadOnly("name", [this](Entity& self) { return m_Scene->GetComponent<TagComponent>(self).Tag; });
-    }
-
-    void Engine::RegisterScriptFunctions() const
-    {
-        m_ScriptEngine->RegisterScriptFunction("load");
-        m_ScriptEngine->RegisterScriptFunction("fixed_update");
-        m_ScriptEngine->RegisterScriptFunction("update");
-        m_ScriptEngine->RegisterScriptFunction("draw");
-        m_ScriptEngine->RegisterScriptFunction("on_quit");
-        m_ScriptEngine->RegisterScriptFunction("resize");
-        m_ScriptEngine->RegisterScriptFunction("key_pressed");
-        m_ScriptEngine->RegisterScriptFunction("key_released");
-        m_ScriptEngine->RegisterScriptFunction("mouse_pressed");
-        m_ScriptEngine->RegisterScriptFunction("mouse_released");
-        m_ScriptEngine->RegisterScriptFunction("mouse_moved");
-        m_ScriptEngine->RegisterScriptFunction("mouse_scrolled");
     }
 }

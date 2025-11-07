@@ -62,15 +62,12 @@ namespace Zuno
         {
             sol::optional<sol::protected_function> func = env[funcName];
             if (!func)
-            {
-                ZUNO_WARN("Function '{0}' not found in environment", funcName);
                 return false;
-            }
 
             sol::protected_function_result result = (*func)(std::forward<Args>(args)...);
             if (!result.valid())
             {
-                sol::error err = result;
+                const sol::error err = result;
                 ZUNO_ERROR("Error calling {0}(): {1}", funcName, err.what());
                 return false;
             }
