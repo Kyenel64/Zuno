@@ -7,6 +7,7 @@ function load()
 
     enemy = zuno.create("Test", "../sample/entity_script.lua");
     print(enemy.name)
+    print(enemy:get_component("tag").tag)
 end
 
 function fixed_update()

@@ -37,19 +37,20 @@ namespace Zuno
     public:
         explicit ScriptEngine(std::string nameSpace);
 
+        sol::state& GetState() { return m_Lua; }
         sol::environment LoadScript(const std::filesystem::path& path, Entity entity);
         bool LoadScriptString(const std::string& script);
-        void RegisterScriptFunction(const std::string& funcName);
+        void RegisterGlobalFunction(const std::string& funcName);
 
-        template<typename T>
-        UserType<T> RegisterClassType(const std::string& name)
+        template<typename T, typename... Args>
+        UserType<T> RegisterClassType(const std::string& name, Args&&... args)
         {
-            sol::usertype<T> type = m_Lua.new_usertype<T>(name);
+            sol::usertype<T> type = m_Lua.new_usertype<T>(name, std::forward<Args>(args)...);
             return { std::move(type), name };
         }
 
         template <typename... Args>
-        bool CallFunction(const std::string& funcName, Args&&... args)
+        bool CallGlobalFunction(const std::string& funcName, Args&&... args)
         {
             if (!m_CachedFunctions[funcName].valid())
                 return false;

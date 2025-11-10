@@ -48,11 +48,15 @@ namespace Zuno
         sol::protected_function_result result = m_Lua.safe_script(script);
 
         if (!result.valid())
+        {
+            sol::error err = result;
+            ZUNO_ERROR("Failed to load script string: {0}", err.what());
             return false;
+        }
         return true;
     }
 
-    void ScriptEngine::RegisterScriptFunction(const std::string& funcName)
+    void ScriptEngine::RegisterGlobalFunction(const std::string& funcName)
     {
         sol::object obj = m_Lua[m_Namespace][funcName];
         if (obj.is<sol::function>())
