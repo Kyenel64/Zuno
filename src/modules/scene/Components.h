@@ -24,9 +24,7 @@ namespace Zuno
         std::filesystem::path Path;
         sol::environment Env;
 
-        explicit ScriptComponent(std::filesystem::path path)
-            : Path(std::move(path)) {}
-
+        explicit ScriptComponent(std::filesystem::path path) : Path(std::move(path)) {}
         ScriptComponent(const ScriptComponent&) = default;
     };
 }

@@ -18,7 +18,7 @@ namespace Zuno
         m_ScriptEngine = new ScriptEngine("zuno");
         RegisterAPI();
 
-        m_Scene = new Scene(m_ScriptEngine);
+        m_Scene = new Scene();
         m_Root = m_Scene->CreateEntity("Root");
 
         m_Window->SetEventCallback([&](Event& e) { OnEvent(e); });
@@ -37,13 +37,17 @@ namespace Zuno
     void Engine::LoadEntrypoint(std::filesystem::path scriptPath)
     {
         m_EntrypointPath = std::move(scriptPath);
-        m_Scene->AddComponent<ScriptComponent>(m_Root, m_EntrypointPath);
+        auto& component = m_Scene->AddComponent<ScriptComponent>(m_Root, m_EntrypointPath);
+        component.Env = m_ScriptEngine->LoadScript(component.Path, m_Root);
     }
 
 
     void Engine::Run() const
     {
-        m_Scene->OnLoad();
+        m_Scene->View<ScriptComponent>([this](const ScriptComponent& script)
+        {
+            m_ScriptEngine->CallEnvFunction("load", script.Env);
+        });
 
         using clock = std::chrono::high_resolution_clock;
         auto previous = clock::now();
@@ -63,24 +67,118 @@ namespace Zuno
             int updateCount = 0;
             while (lag >= MS_PER_UPDATE && updateCount < 5)
             {
-                m_Scene->OnFixedUpdate();
+                m_Scene->View<ScriptComponent>([this](const ScriptComponent& script)
+                {
+                    m_ScriptEngine->CallEnvFunction("fixed_update", script.Env);
+                });
                 lag -= MS_PER_UPDATE;
                 updateCount++;
             }
 
             // Update
-            m_Scene->OnUpdate(elapsed);
+            m_Scene->View<ScriptComponent>([this, elapsed](const ScriptComponent& script)
+            {
+                m_ScriptEngine->CallEnvFunction("update", script.Env, elapsed);
+            });
 
             // Draw
             // double alpha = lag / 16; TODO: Alpha interpolate
-            m_Scene->OnDraw();
+            m_Scene->View<ScriptComponent>([this](const ScriptComponent& script)
+            {
+                m_ScriptEngine->CallEnvFunction("draw", script.Env);
+            });
+
         }
-        m_Scene->OnQuit();
+        m_Scene->View<ScriptComponent>([this](const ScriptComponent& script)
+        {
+            m_ScriptEngine->CallEnvFunction("on_quit", script.Env);
+        });
     }
 
     void Engine::OnEvent(Event& event)
     {
-        m_Scene->OnEvent(event);
+        switch (event.GetType())
+        {
+        case EventType::WindowResize:
+            {
+                if (const auto* e = dynamic_cast<WindowResizedEvent*>(&event))
+                {
+                    m_Scene->View<ScriptComponent>([this, e](const ScriptComponent& script)
+                    {
+                        m_ScriptEngine->CallEnvFunction("resize", script.Env, e->GetWidth(), e->GetHeight());
+                    });
+                }
+                break;
+            }
+        case EventType::KeyPressed:
+            {
+                if (const auto* e = dynamic_cast<KeyPressedEvent*>(&event))
+                {
+                    m_Scene->View<ScriptComponent>([this, e](const ScriptComponent& script)
+                    {
+                        m_ScriptEngine->CallEnvFunction("key_pressed", script.Env, e->GetKey());
+                    });
+                }
+                break;
+            }
+        case EventType::KeyReleased:
+            {
+                if (const auto* e = dynamic_cast<KeyReleasedEvent*>(&event))
+                {
+                    m_Scene->View<ScriptComponent>([this, e](const ScriptComponent& script)
+                    {
+                        m_ScriptEngine->CallEnvFunction("key_released", script.Env, e->GetKey());
+                    });
+                }
+                break;
+            }
+        case EventType::MouseButtonPressed:
+            {
+                if (const auto* e = dynamic_cast<MouseButtonPressedEvent*>(&event))
+                {
+                    m_Scene->View<ScriptComponent>([this, e](const ScriptComponent& script)
+                    {
+                        m_ScriptEngine->CallEnvFunction("mouse_pressed", script.Env, e->GetMouseButton());
+                    });
+                }
+                break;
+            }
+        case EventType::MouseButtonReleased:
+            {
+                if (const auto* e = dynamic_cast<MouseButtonReleasedEvent*>(&event))
+                {
+                    m_Scene->View<ScriptComponent>([this, e](const ScriptComponent& script)
+                    {
+                        m_ScriptEngine->CallEnvFunction("mouse_released", script.Env, e->GetMouseButton());
+                    });
+                }
+                break;
+            }
+        case EventType::MouseMoved:
+            {
+                if (const auto* e = dynamic_cast<MouseMovedEvent*>(&event))
+                {
+                    m_Scene->View<ScriptComponent>([this, e](const ScriptComponent& script)
+                    {
+                        m_ScriptEngine->CallEnvFunction("mouse_moved", script.Env, e->GetXPos(), e->GetYPos());
+                    });
+                }
+                break;
+            }
+        case EventType::MouseScrolled:
+            {
+                if (const auto* e = dynamic_cast<MouseScrolledEvent*>(&event))
+                {
+                    m_Scene->View<ScriptComponent>([this, e](const ScriptComponent& script)
+                    {
+                        m_ScriptEngine->CallEnvFunction("mouse_scrolled", script.Env, e->GetXOffset(), e->GetYOffset());
+                    });
+                }
+                break;
+            }
+        default:
+            break;
+        }
     }
 
     void Engine::RegisterAPI() const
@@ -93,7 +191,8 @@ namespace Zuno
             const Entity entity = m_Scene->CreateEntity(name);
             if (!pathToScript.empty())
             {
-                m_Scene->AddComponent<ScriptComponent>(entity, pathToScript);
+                auto& component = m_Scene->AddComponent<ScriptComponent>(entity, pathToScript);
+                component.Env = m_ScriptEngine->LoadScript(component.Path, entity);
                 // Not sure if I should call load here. Maybe better to wait for next loop to call load before the updates?
                 m_ScriptEngine->CallEnvFunction("load", m_Scene->GetComponent<ScriptComponent>(entity).Env);
             }

@@ -19,6 +19,7 @@ set(SOURCES
         test_log.cpp
         test_window.cpp
         test_scripting.cpp
+        test_scene.cpp
 )
 
 # Files to not test on CI

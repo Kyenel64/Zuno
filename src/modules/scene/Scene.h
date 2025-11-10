@@ -6,8 +6,6 @@
 
 #include <entt/entt.hpp>
 
-#include "modules/scripting/ScriptEngine.h"
-#include "modules/event/Event.h"
 #include "modules/scene/Entity.h"
 #include "modules/scene/Components.h"
 
@@ -16,28 +14,22 @@ namespace Zuno
     class Scene
     {
     public:
-        explicit Scene(ScriptEngine* scriptEngine) : m_ScriptEngine(scriptEngine) {}
+        explicit Scene() = default;
         ~Scene() = default;
 
         Entity CreateEntity(const std::string& name = "entity");
 
-        void OnLoad();
-        void OnEvent(Event& event);
-        void OnFixedUpdate();
-        void OnUpdate(double deltaTime);
-        void OnDraw();
-        void OnQuit();
+        template<typename... Components, typename Func>
+        void View(Func func)
+        {
+            auto view = m_Registry.view<Components...>();
+            view.each(func);
+        }
 
         template<typename T, typename... Args>
         T& AddComponent(const Entity entity, Args&&... args)
         {
-            T& component = m_Registry.emplace<T>(static_cast<entt::entity>(entity), std::forward<Args>(args)...);
-
-            if constexpr (std::is_same_v<T, ScriptComponent>)
-            {
-                component.Env = m_ScriptEngine->LoadScript(component.Path, entity);
-            }
-            return component;
+            return m_Registry.emplace<T>(static_cast<entt::entity>(entity), std::forward<Args>(args)...);
         }
 
         template<typename T>
@@ -59,7 +51,5 @@ namespace Zuno
         }
     private:
         entt::registry m_Registry;
-
-        ScriptEngine* m_ScriptEngine = nullptr;
     };
 }
