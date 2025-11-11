@@ -14,22 +14,23 @@ namespace Zuno
         Engine(std::string windowTitle, uint32_t width, uint32_t height);
         ~Engine();
 
-        void Run() const;
+        void Run();
 
         void LoadEntrypoint(std::filesystem::path scriptPath);
 
         void OnEvent(Event& event);
 
     private:
-        void RegisterAPI() const;
+        void RegisterAPI();
 
     private:
         std::string m_WindowTitle;
         std::filesystem::path m_EntrypointPath;
         Entity m_Root;
 
-        Window* m_Window = nullptr;
-        ScriptEngine* m_ScriptEngine = nullptr;
-        Scene* m_Scene = nullptr;
+        // In order
+        Window m_Window;
+        ScriptEngine m_ScriptEngine;
+        Scene m_Scene;
     };
 }
