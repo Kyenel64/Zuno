@@ -1,7 +1,7 @@
 # Zuno
 ### A "Ground Up" game engine in Lua. (In development)
 Ever have to disable a bunch of unneeded engine features that slowed down your game? <br/>
-Zuno lets you start from the <strong>Ground Up<strong/>. Start with a simple, code-only 2D engine and add modules to "build" your engine all the way up to a 3D, editor-integrated, node-based scripting engine. <br/>
+Zuno lets you start from the <strong>Ground Up</strong>. Start with a simple, code-only 2D engine and add modules to "build" your engine all the way up to a 3D, editor-integrated, node-based scripting engine. <br/>
 
 [![Build and Test](https://github.com/Kyenel64/Zuno/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/Kyenel64/Zuno/actions/workflows/build-and-test.yml)
 
