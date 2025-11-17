@@ -38,8 +38,8 @@ namespace Zuno
         explicit ScriptEngine(std::string nameSpace);
 
         sol::state& GetState() { return m_Lua; }
-        sol::environment LoadScript(const std::filesystem::path& path, Entity entity);
-        bool LoadScriptString(const std::string& script);
+        sol::environment LoadScript(const std::filesystem::path& path);
+        void BindEnvToEntity(sol::environment& env, Entity entity);
         void RegisterGlobalFunction(const std::string& funcName);
 
         template<typename T, typename... Args>

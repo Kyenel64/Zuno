@@ -15,10 +15,9 @@ namespace Zuno
     }
 
 
-    sol::environment ScriptEngine::LoadScript(const std::filesystem::path& path, Entity entity)
+    sol::environment ScriptEngine::LoadScript(const std::filesystem::path& path)
     {
         sol::environment env(m_Lua, sol::create, m_Lua.globals());
-        env["self"] = entity;
 
         const sol::load_result result = m_Lua.load_file(path.string());
         if (!result.valid())
@@ -43,18 +42,11 @@ namespace Zuno
         return env;
     }
 
-    bool ScriptEngine::LoadScriptString(const std::string& script)
+    void ScriptEngine::BindEnvToEntity(sol::environment& env, Entity entity)
     {
-        sol::protected_function_result result = m_Lua.safe_script(script);
-
-        if (!result.valid())
-        {
-            sol::error err = result;
-            ZUNO_ERROR("Failed to load script string: {0}", err.what());
-            return false;
-        }
-        return true;
+        env["self"] = entity;
     }
+
 
     void ScriptEngine::RegisterGlobalFunction(const std::string& funcName)
     {

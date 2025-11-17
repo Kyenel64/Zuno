@@ -31,8 +31,10 @@ namespace Zuno
     void Engine::LoadEntrypoint(std::filesystem::path scriptPath)
     {
         m_EntrypointPath = std::move(scriptPath);
+
         auto& component = m_Scene.AddComponent<ScriptComponent>(m_Root, m_EntrypointPath);
-        component.Env = m_ScriptEngine.LoadScript(component.Path, m_Root);
+        component.Env = m_ScriptEngine.LoadScript(component.Path);
+        m_ScriptEngine.BindEnvToEntity(component.Env, m_Root);
     }
 
 
@@ -186,7 +188,8 @@ namespace Zuno
             if (!pathToScript.empty())
             {
                 auto& component = m_Scene.AddComponent<ScriptComponent>(entity, pathToScript);
-                component.Env = m_ScriptEngine.LoadScript(component.Path, entity);
+                component.Env = m_ScriptEngine.LoadScript(component.Path);
+                m_ScriptEngine.BindEnvToEntity(component.Env, entity);
                 // Not sure if I should call load here. Maybe better to wait for next loop to call load before the updates?
                 m_ScriptEngine.CallEnvFunction("load", m_Scene.GetComponent<ScriptComponent>(entity).Env);
             }
